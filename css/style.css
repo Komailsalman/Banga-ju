@@ -1,86 +1,5 @@
-/* -------------------------------------------
 
-Name: 		Starbelly
-Version:  1.0
-Author:		Nazar Miller (millerDigitalDesign)
-Portfolio:  https://themeforest.net/user/millerdigitaldesign/portfolio?ref=MillerDigitalDesign
 
-p.s. I am available for Freelance hire (UI design, web development). mail: miller.themes@gmail.com
-
-------------------------------------------- */
-/*--------------------------------------------
-
-1. common
-      - fonts
-      - preloader
-      - typography
-      - group title
-      - list
-      - pagination
-      - instagram
-      - keywords
-      - slider navigation
-      - breadcrumbs
-      - badge
-      - stars
-      - social icons
-      - buttons
-      - mobile menu button
-      - click effect
-      - page transitions
-      - settings
-      - animations
-      - spaces
-      - grid
-2. frame
-      - wrapper
-      - top bar
-      - navigation
-      - footer
-      - info bar
-      - minicart
-3. content
-      - banner
-      - features
-      - menu
-      - call to action
-      - popup
-      - promo
-      - reviews
-      - author
-      - contact
-      - map
-      - blog
-      - sidebar
-      - gallery
-      - filter
-      - team
-      - categories
-      - radio
-      - product
-      - tabs
-      - faq
-      - datepicker
-4. shop
-      - minicart button
-      - cart
-      - add to cart button
-      - checkout
-6. illustrations
-      - background
-      - illustration 1
-      - illustration 1 (2)
-      - illustration 1 (404)
-      - illustration 2
-      - illustration 3
-      - illustration 4
-      - illustration 5
-      - illustration 6
-      - illustration 7
-      - illustration 8
-      - illustration 9
-
---------------------------------------------*/
 /***************************
 
 font
@@ -233,227 +152,7 @@ h5 {
   .sb-h3,
   h3 {
     font-size: 18px; } }
-.sb-cate-title {
-  font-size: 28px;
-  letter-spacing: -1px; }
 
-.sb-signature {
-  width: 160px; }
-
-.sb-404 {
-  display: block;
-  color: #F5C332;
-  font-size: 56px;
-  font-family: 'Monoton', cursive;
-  margin-bottom: 10px; }
-
-/***************************
-
-group title
-
-***************************/
-.sb-group-title {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end; }
-  .sb-group-title .sb-left {
-    width: 50%; }
-  .sb-group-title .sb-right {
-    width: 50%;
-    display: flex;
-    justify-content: flex-end; }
-
-@media (max-width: 768px) {
-  .sb-group-title {
-    flex-direction: column; }
-    .sb-group-title .sb-left {
-      width: 100%; }
-    .sb-group-title .sb-right {
-      width: 100%;
-      justify-content: space-between; } }
-/***************************
-
-list
-
-***************************/
-.sb-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-  padding: 15px 0;
-  border-bottom: solid 1px #F2F3F5; }
-  .sb-list li b {
-    font-weight: 400; }
-    .sb-list li b a {
-      display: block;
-      text-decoration: none;
-      color: inherit;
-      transition: 0.3s ease-in-out; }
-      .sb-list li b a:hover {
-        transform: translateX(10px); }
-  .sb-list li span {
-    font-size: 12px;
-    color: #6F6F87; }
-    .sb-list li span.sb-number {
-      background-color: #F2F3F5;
-      padding: 2px 5px;
-      color: #231E41; }
-  .sb-list li:first-child {
-    border-top: solid 1px #F2F3F5; }
-
-/***************************
-
-pagination
-
-***************************/
-.sb-pagination {
-  margin-top: 30px;
-  display: flex;
-  color: #6F6F87;
-  align-items: center; }
-  .sb-pagination.sb-mt-0 {
-    margin-top: 0; }
-  .sb-pagination li {
-    margin-right: 10px; }
-    .sb-pagination li a {
-      position: relative;
-      background-color: #F9FAFC;
-      text-align: center;
-      display: block;
-      height: 55px;
-      width: 55px;
-      padding-top: 15px;
-      color: #231E41; }
-      .sb-pagination li a:after {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        content: '';
-        height: 2px;
-        width: 0;
-        background-color: #F5C332;
-        transition: 0.3s ease-in-out; }
-      .sb-pagination li a:hover:after {
-        width: 100%; }
-    .sb-pagination li.sb-active a {
-      background-color: #F5C332; }
-
-/***************************
-
-instagram
-
-***************************/
-.sb-instagram {
-  display: flex;
-  flex-wrap: wrap;
-  margin-left: -5px;
-  margin-right: -5px; }
-  .sb-instagram li {
-    padding: 5px;
-    width: 33.33%; }
-    .sb-instagram li a {
-      position: relative;
-      overflow: hidden;
-      display: block;
-      width: 100%;
-      padding-bottom: 100%; }
-      .sb-instagram li a img {
-        position: absolute;
-        object-fit: cover;
-        object-position: center;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%; }
-
-/***************************
-
-keywords
-
-***************************/
-.sb-keywords {
-  display: flex;
-  flex-wrap: wrap; }
-  .sb-keywords li {
-    padding-right: 5px;
-    padding-bottom: 5px; }
-    .sb-keywords li a {
-      display: block;
-      font-size: 14px;
-      background-color: #F5C332;
-      padding: 2px 5px;
-      color: #231E41;
-      transition: 0.3s ease-in-out; }
-      .sb-keywords li a:hover {
-        position: relative;
-        filter: brightness(110%); }
-
-/***************************
-
-slider navigation
-
-***************************/
-.sb-slider-nav {
-  height: 55px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 115px;
-  margin-right: 15px; }
-  .sb-slider-nav .sb-next-btn, .sb-slider-nav .sb-prev-btn {
-    height: 50px;
-    width: 50px;
-    font-size: 12px;
-    border-radius: 50%;
-    border: solid 2px #231E41;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: 0.3s ease-in-out; }
-    .sb-slider-nav .sb-next-btn.swiper-button-disabled, .sb-slider-nav .sb-prev-btn.swiper-button-disabled {
-      opacity: 0.2; }
-    .sb-slider-nav .sb-next-btn:focus, .sb-slider-nav .sb-prev-btn:focus {
-      outline: inherit; }
-
-/***************************
-
-breadcrumbs
-
-***************************/
-.sb-breadcrumbs {
-  border: solid 2px #FFFFFF;
-  position: relative;
-  overflow: hidden;
-  max-width: 100%;
-  background-color: #F5C332;
-  display: inline-flex;
-  align-items: center;
-  font-weight: 500;
-  font-size: 14px;
-  padding: 0 20px;
-  height: 55px;
-  transition: 0.3s ease-in-out; }
-  .sb-breadcrumbs li {
-    white-space: nowrap;
-    display: flex;
-    letter-spacing: 0; }
-    .sb-breadcrumbs li:after {
-      content: "/"; }
-    .sb-breadcrumbs li:last-child:after {
-      display: none; }
-    .sb-breadcrumbs li:last-child a {
-      cursor: not-allowed;
-      opacity: 1; }
-    .sb-breadcrumbs li a {
-      padding: 0 10px;
-      opacity: 0.4;
-      transition: 0.3s ease-in-out; }
-      .sb-breadcrumbs li a:hover {
-        opacity: 1; }
 
 /***************************
 
@@ -502,25 +201,6 @@ stars
     text-shadow: 0 0 1px #6F6F87; }
     .sb-stars.sb-unrated li span {
       text-shadow: none; }
-
-/***************************
-
-social icons
-
-***************************/
-.sb-social {
-  width: 33.333%;
-  display: flex;
-  justify-content: center; }
-  .sb-social li {
-    margin-right: 15px; }
-    .sb-social li a {
-      transition: 0.3s ease-in-out;
-      font-size: 14px; }
-      .sb-social li a:hover {
-        color: #F5C332; }
-    .sb-social li:last-child {
-      margin-right: 0; }
 
 /***************************
 
@@ -916,8 +596,6 @@ spaces
 .sb-mb-25 {
   margin-bottom: 25px !important; }
 
-.sb-mb-15 {
-  margin-bottom: 15px !important; }
 
 .sb-mb-10 {
   margin-bottom: 10px !important; }
@@ -976,16 +654,24 @@ spaces
 grid
 
 ***************************/
+/* إجبار الشبكة على أن تحتوي على عنصرين في كل صف */
 .sb-masonry-grid {
-  width: calc(100% + 30px);
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin-left: -15px;
-  margin-right: -15px; }
-  .sb-masonry-grid .sb-grid-item {
-    padding: 0 15px;
-    width: 100%; }
+  display: flex   ;
+  flex-wrap: wrap ;
+  justify-content: space-between ;
+   /* توزيع العناصر بالتساوي */
+}
+
+
+/* جعل كل منتج يأخذ نصف العرض بالقوة */
+.sb-masonry-grid .sb-grid-item {
+  width: calc(45% - 5px) !important; /* 50% مع ترك مسافة صغيرة */
+  padding: 5px !important;
+  box-sizing: border-box !important; 
+   margin-left: 23px;
+  margin-right: -15px;/* ضمان عدم كسر التصميم */
+  
+}
     .sb-masonry-grid .sb-grid-item.sb-item-25 {
       width: 25%;
       padding: 0 15px; }
@@ -999,6 +685,8 @@ grid
 .grid-sizer {
   width: 100%; }
 
+
+  
 @media (max-width: 992px) {
   .sb-masonry-grid .sb-grid-item.sb-item-25 {
     width: 33.333%; }
@@ -1435,7 +1123,16 @@ menu
 ***************************/
 .sb-menu-item {
   width: 100%;
-  display: block; }
+  max-width: 320px;
+  margin: 0 auto;
+  display: block;
+  flex-direction: column;
+  align-items: center;
+  
+}
+
+
+
   .sb-menu-item .sb-cover-frame {
     display: block;
     background-color: #F2F3F5;
@@ -1455,33 +1152,51 @@ menu
       right: 0;
       transform: scale(1.001);
       transition: 0.3s ease-in-out; }
+  /* ضبط ترتيب الاسم والسعر */
   .sb-menu-item .sb-card-tp {
     margin-bottom: 15px;
-    padding-left: 15px;
+    padding-right: 15px ;
     background-color: #F2F3F5;
     display: flex;
-    justify-content: space-between;
-    align-items: center; }
-    .sb-menu-item .sb-card-tp .sb-card-title {
-      width: calc(100% - 90px);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -moz-box;
-      -moz-box-orient: vertical;
-      display: -webkit-box;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
-      line-clamp: 1;
-      box-orient: vertical; }
-    .sb-menu-item .sb-card-tp .sb-price {
-      width: 60px;
-      height: 60px;
-      font-weight: 500;
-      background-color: #F5C332;
-      font-size: 24px;
-      display: flex;
-      justify-content: center;
-      align-items: center; }
+    justify-content: space-between; /* يجعل الاسم في اليمين والسعر في اليسار */
+    align-items: center;
+    flex-direction: row-reverse; /* يجعل العناصر تتبع اتجاه RTL */
+  }
+
+/* جعل اسم المنتج يظهر على اليمين */
+.sb-menu-item .sb-card-tp .sb-card-title {
+  width: auto; /* يتيح التكيف حسب النص */
+  font-size: 15px;
+  font-weight: bold;
+  text-align: right; /* محاذاة النص إلى اليمين */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* جعل السعر يظهر أقصى اليسار */
+.sb-menu-item .sb-card-tp .sb-price {
+  width: 60px;
+  height: 60px;
+  font-weight: 500;
+  background-color: #F5C332;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-shrink: 0; /* يمنع السعر من التمدد */
+}
+
+/* جعل وصف المنتج بارتفاع موحد */
+.sb-description {
+  text-align: right;
+  height: 60px; /* ارتفاع موحد لجميع الأوصاف */
+  display: flex;
+  align-items: center; /* محاذاة النص في الوسط */
+  justify-content: right; /* جعل النص في أقصى اليمين */
+}
+
       .sb-menu-item .sb-card-tp .sb-price sub {
         font-size: 12px;
         font-weight: 400; }
@@ -1971,8 +1686,7 @@ gallery
 .sb-item-50 .sb-gallery-item.sb-gallery-vert {
   padding-bottom: 136%; }
 
-.sb-menu-section {
-  position: relative; }
+
 
 /***************************
 
@@ -3627,3 +3341,132 @@ illustration 9
   animation: anima1 3s 3s infinite ease-in-out; }
 
 /*# sourceMappingURL=style.css.map */
+
+
+
+
+
+
+
+
+
+
+
+
+/* جعل الأزرار تبدأ من اليمين مع تفعيل السكرول */
+.sb-filter-wrapper {
+  overflow-x: auto; /* تفعيل السكرول الأفقي */
+  overflow-y: hidden; /* منع السكرول العمودي */
+  white-space: nowrap;
+  display: flex;
+  flex-direction: row-reverse; /* لضمان أن العناصر تبدأ من اليمين */
+  padding: 10px 0;
+  scroll-behavior: smooth; /* جعل التمرير سلسًا */
+  scrollbar-width: thin; /* التحكم في شكل شريط التمرير */
+  scrollbar-color: #ffcc00 #f1f1f1;
+  
+}
+
+
+/* جعل القائمة نفسها تتبع اتجاه الكتابة العربي */
+.sb-filter {
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;
+  direction: rtl; /* ترتيب الأزرار من اليمين إلى اليسار */
+  padding-bottom: 10px;
+}
+
+/* جعل القائمة تتحرك داخل السكرول */
+.sb-filter {
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap; /* منع الأزرار من النزول لسطر جديد */
+  padding-bottom: 10px;
+}
+
+/* تصميم الأزرار */
+.sb-filter-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 15px;
+  background-color: #ffcc00;
+  color: black;
+  border-radius: 10px;
+  min-width: 140px; /* زيادة العرض لتحسين التنقل */
+  min-height: 50px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  flex-shrink: 0;
+  text-align: center;
+  white-space: nowrap; /* منع النص من النزول لسطر جديد */
+}
+
+/* ضبط الزر النشط */
+.sb-filter-link.sb-active {
+  background-color: #ff9900;
+}
+
+/* تخصيص شريط التمرير */
+.sb-filter-wrapper::-webkit-scrollbar {
+  height: 5px;
+}
+
+.sb-filter-wrapper::-webkit-scrollbar-thumb {
+  background: #ffcc00;
+  border-radius: 5px;
+}
+
+.sb-filter-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* جعل الأزرار عمودية بحيث تكون الصورة فوق النص */
+.sb-filter-link {
+  display: flex;
+  flex-direction: column; /* ترتيب العناصر عموديًا */
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background-color: #ffcc00;
+  color: black;
+  border-radius: 10px;
+  min-width: 100px;
+  min-height: 100px; /* زيادة الطول حتى يكون هناك مساحة كافية */
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
+}
+
+/* ضبط حجم الصورة وضمان وجودها في الأعلى */
+.sb-filter-link img {
+  width: 150px; /* ضبط عرض الصورة */
+  height: 100px; /* ضبط ارتفاع الصورة */
+  object-fit: contain;
+  display: block;
+}
+
+/* ضبط النص ليكون في الأسفل */
+.sb-filter-link span {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+/* تصميم الزر النشط */
+.sb-filter-link.sb-active {
+  background-color: #ff9900;
+}
+
+
+
+
+
+
+
+
+
+

@@ -721,7 +721,7 @@ top bar
   position: fixed;
   z-index: 9999;
   top: 0;
-  left: 0;
+  left: 0;  
   right: 0;
   border-bottom: solid 1px #F2F3F5;
   border-top: solid 1px #F2F3F5; }
@@ -744,19 +744,18 @@ top bar
     height: 120px;
     width: 100%;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+   
     transition: 0.3s ease-in-out; }
     .sb-top-bar-frame .sb-top-bar .sb-logo-frame {
-      display: flex;
       align-items: center;
       height: 80px;
       width: 130px;
       transition: 0.3s ease-in-out; }
       .sb-top-bar-frame .sb-top-bar .sb-logo-frame img {
-        width: 100%; }
-      .sb-top-bar-frame .sb-top-bar .sb-logo-frame:hover {
-        filter: brightness(110%); }
+        width: 100%;
+    height: 100%;
+    object-fit: contain; /* تأكد من أن الصورة تتكيف داخل الحجم المحدد */ }
+     
     .sb-top-bar-frame .sb-top-bar .sb-right-side {
       width: 71%;
       display: flex;
@@ -1139,7 +1138,9 @@ menu
     overflow: hidden;
     position: relative;
     padding-bottom: 100%;
-    transition: 0.3s ease-in-out; }
+    transition: 0.3s ease-in-out; 
+    border-radius: 10px;
+}
     .sb-menu-item .sb-cover-frame img {
       width: 100%;
       height: 100%;
@@ -1161,6 +1162,8 @@ menu
     justify-content: space-between; /* يجعل الاسم في اليمين والسعر في اليسار */
     align-items: center;
     flex-direction: row-reverse; /* يجعل العناصر تتبع اتجاه RTL */
+    border-radius: 10px;
+
   }
 
 /* جعل اسم المنتج يظهر على اليمين */
@@ -1172,6 +1175,7 @@ menu
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  
 }
 
 /* جعل السعر يظهر أقصى اليسار */
@@ -1186,6 +1190,9 @@ menu
   align-items: center;
   text-align: center;
   flex-shrink: 0; /* يمنع السعر من التمدد */
+  border-top-left-radius:  10px;
+  border-bottom-left-radius: 10px ;
+
 }
 
 /* جعل وصف المنتج بارتفاع موحد */
@@ -1196,6 +1203,8 @@ menu
   align-items: center; /* محاذاة النص في الوسط */
   justify-content: right; /* جعل النص في أقصى اليمين */
 }
+
+
 
       .sb-menu-item .sb-card-tp .sb-price sub {
         font-size: 12px;
@@ -1718,7 +1727,7 @@ filter
       filter: brightness(102%);
       color: #231E41; }
 
-@media (max-width: 768px) {
+@media (max-width: 100px) {
   .sb-filter {
     margin-bottom: 60px; }
     .sb-filter .sb-filter-link {
@@ -1910,7 +1919,9 @@ product
       font-weight: 400; }
 .sb-product-description .sb-buttons-frame {
   display: flex;
-  align-items: center; }
+  align-items: center;
+ }
+
   .sb-product-description .sb-buttons-frame .sb-input-number-frame {
     margin-bottom: 10px;
     margin-right: 15px; }
@@ -2057,11 +2068,13 @@ cart
 
 .sb-product {
   display: flex;
-  align-items: center; }
+  align-items: center;
+   }
   .sb-product .sb-cover-frame {
     position: relative;
     width: 90px;
-    padding-bottom: 90px; }
+    padding-bottom: 90px;
+   }
     .sb-product .sb-cover-frame img {
       position: absolute;
       top: 0;
@@ -2069,7 +2082,8 @@ cart
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center; }
+      object-position: center; 
+    }
   .sb-product .sb-prod-description {
     padding-left: 15px;
     width: calc(100% - 90px); }
@@ -2209,7 +2223,8 @@ cart
       margin-bottom: 15px;
       flex-direction: column; }
       .sb-cart-table .sb-cart-item .sb-product .sb-cover-frame {
-        margin-bottom: 15px; }
+        margin-bottom: 15px; 
+      }
       .sb-cart-table .sb-cart-item .sb-product .sb-prod-description {
         padding-left: 0; }
     .sb-cart-table .sb-cart-item .sb-input-number-frame {
@@ -3360,10 +3375,16 @@ illustration 9
   white-space: nowrap;
   display: flex;
   flex-direction: row-reverse; /* لضمان أن العناصر تبدأ من اليمين */
-  padding: 10px 0;
+  padding: 15px 0;
   scroll-behavior: smooth; /* جعل التمرير سلسًا */
   scrollbar-width: thin; /* التحكم في شكل شريط التمرير */
   scrollbar-color: #ffcc00 #f1f1f1;
+  background-color: #f1f1f1;
+  border-radius: 10px;
+  width: 115%;
+  transform: translateX(-6.5%); /* يجعله في المنتصف */
+
+  height: 160px;
   
 }
 
@@ -3383,6 +3404,7 @@ illustration 9
   gap: 10px;
   flex-wrap: nowrap; /* منع الأزرار من النزول لسطر جديد */
   padding-bottom: 10px;
+  
 }
 
 /* تصميم الأزرار */
@@ -3447,8 +3469,16 @@ illustration 9
   height: 100px; /* ضبط ارتفاع الصورة */
   object-fit: contain;
   display: block;
+  filter: brightness(50%);
+  transition: 0.3s ease-in-out; /* تأثير انتقالي ناعم */
 }
 
+
+
+/* عند تنشيط الفلتر، تصبح الصورة عادية */
+.sb-filter .sb-filter-link.sb-active img {
+  filter: brightness(100%);
+}
 /* ضبط النص ليكون في الأسفل */
 .sb-filter-link span {
   display: block;
@@ -3464,9 +3494,47 @@ illustration 9
 
 
 
+.sb-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* توزيع العناصر بالتساوي */
+  width: 100%;
+  padding: 10px 15px;
+}
+
+.sb-logo-frame {
+  width: 120px; /* حجم ثابت للوجو */
+  height: auto;
+  flex-shrink: 0; /* منع اللوجو من التمدد */
+}
+
+.sb-filter-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #000000;
+  text-align: center;
+  white-space: nowrap; /* منع انتقال النص إلى أكثر من سطر */
+  text-overflow: ellipsis; /* إضافة ... إذا كان النص طويلًا */
+  overflow: hidden; /* إخفاء الزائد */
+  flex-grow: 1; /* يجعل العنوان يأخذ المساحة المتاحة */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 
 
 
 
-
+.fancybox-caption {
+  position: absolute;
+  bottom: 200px; /* ✅ رفع النص أكثر للأعلى */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #F5C332;
+  color: #000000;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 16px;
+  width: 300px;
+}

@@ -723,3 +723,31 @@ $(function() {
   });
 
 });
+document.addEventListener("DOMContentLoaded", function () {
+  // العثور على جميع أزرار الفلتر
+  var filterLinks = document.querySelectorAll(".sb-filter-link");
+  var filterTitle = document.querySelector(".sb-filter-title");
+
+  // دالة لتحديث العنوان عند تغيير الفلتر
+  function updateFilterTitle(activeLink) {
+      if (activeLink) {
+          filterTitle.textContent = activeLink.textContent; // تحديث النص في الـ top bar
+      }
+  }
+
+  // عند النقر على أي فلتر، يتم تحديث الاسم في التوب بار
+  filterLinks.forEach(function (link) {
+      link.addEventListener("click", function () {
+          // إزالة `sb-active` من جميع الروابط وإضافتها إلى الرابط النشط
+          filterLinks.forEach(l => l.classList.remove("sb-active"));
+          this.classList.add("sb-active");
+
+          // تحديث عنوان `top bar` باسم الفلتر النشط
+          updateFilterTitle(this);
+      });
+  });
+
+  // تعيين الاسم المبدئي بناءً على الفلتر النشط عند تحميل الصفحة
+  var activeFilter = document.querySelector(".sb-filter-link.sb-active");
+  updateFilterTitle(activeFilter);
+});

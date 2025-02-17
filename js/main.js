@@ -751,3 +751,20 @@ document.addEventListener("DOMContentLoaded", function () {
   var activeFilter = document.querySelector(".sb-filter-link.sb-active");
   updateFilterTitle(activeFilter);
 });
+
+
+// استهداف جميع الأزرار
+const buttons = document.querySelectorAll(".custom-button");
+
+// إضافة حدث عند الضغط على أي زر
+buttons.forEach(button => {
+    button.addEventListener("click", function(event) {
+        event.preventDefault(); // منع الانتقال للرابط #
+
+        // إزالة الـ active من جميع الأزرار
+        buttons.forEach(btn => btn.classList.remove("active"));
+
+        // إضافة active فقط للزر المضغوط
+        this.classList.add("active");
+    });
+});

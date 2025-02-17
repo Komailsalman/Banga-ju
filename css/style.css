@@ -1722,7 +1722,8 @@ filter
       margin-right: 0; }
     .sb-filter .sb-filter-link.sb-active {
       background-color: #F5C332;
-      color: #231E41; }
+      color: #231E41;
+    boarder: 2px;}
     .sb-filter .sb-filter-link:hover {
       filter: brightness(102%);
       color: #231E41; }

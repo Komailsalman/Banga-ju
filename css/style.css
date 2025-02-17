@@ -1723,7 +1723,8 @@ filter
     .sb-filter .sb-filter-link.sb-active {
       background-color: #F5C332;
       color: #231E41;
-    boarder: 2px;}
+       border: 1px solid rgba(255, 165, 0, 0.5); /* ✅ لون برتقالي فاتح */
+    }
     .sb-filter .sb-filter-link:hover {
       filter: brightness(102%);
       color: #231E41; }

@@ -723,48 +723,36 @@ $(function() {
   });
 
 });
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
-  // العثور على جميع أزرار الفلتر
-  var filterLinks = document.querySelectorAll(".sb-filter-link");
-  var filterTitle = document.querySelector(".sb-filter-title");
+    // العثور على جميع أزرار الفلتر
+    var filterButtons = document.querySelectorAll(".custom-button");
+    var filterTitle = document.querySelector(".sb-filter-title");
 
-  // دالة لتحديث العنوان عند تغيير الفلتر
-  function updateFilterTitle(activeLink) {
-      if (activeLink) {
-          filterTitle.textContent = activeLink.textContent; // تحديث النص في الـ top bar
-      }
-  }
+    // دالة لتحديث العنوان عند تغيير الفلتر
+    function updateFilterTitle(activeButton) {
+        if (activeButton) {
+            filterTitle.textContent = activeButton.querySelector("span").textContent; // تحديث النص في الـ top bar
+        }
+    }
 
-  // عند النقر على أي فلتر، يتم تحديث الاسم في التوب بار
-  filterLinks.forEach(function (link) {
-      link.addEventListener("click", function () {
-          // إزالة `sb-active` من جميع الروابط وإضافتها إلى الرابط النشط
-          filterLinks.forEach(l => l.classList.remove("sb-active"));
-          this.classList.add("sb-active");
+    // عند النقر على أي فلتر، يتم تحديث الاسم في التوب بار
+    filterButtons.forEach(function (button) {
+        button.addEventListener("click", function (event) {
+            event.preventDefault(); // منع الانتقال للرابط #
 
-          // تحديث عنوان `top bar` باسم الفلتر النشط
-          updateFilterTitle(this);
-      });
-  });
+            // إزالة `active` من جميع الأزرار وإضافتها إلى الزر النشط
+            filterButtons.forEach(btn => btn.classList.remove("active"));
+            this.classList.add("active");
 
-  // تعيين الاسم المبدئي بناءً على الفلتر النشط عند تحميل الصفحة
-  var activeFilter = document.querySelector(".sb-filter-link.sb-active");
-  updateFilterTitle(activeFilter);
-});
-
-
-// استهداف جميع الأزرار
-const buttons = document.querySelectorAll(".custom-button");
-
-// إضافة حدث عند الضغط على أي زر
-buttons.forEach(button => {
-    button.addEventListener("click", function(event) {
-        event.preventDefault(); // منع الانتقال للرابط #
-
-        // إزالة الـ active من جميع الأزرار
-        buttons.forEach(btn => btn.classList.remove("active"));
-
-        // إضافة active فقط للزر المضغوط
-        this.classList.add("active");
+            // تحديث عنوان `sb-filter-title` باسم الفلتر النشط
+            updateFilterTitle(this);
+        });
     });
+
+    // تعيين الاسم المبدئي بناءً على الفلتر النشط عند تحميل الصفحة
+    var activeFilter = document.querySelector(".custom-button.active");
+    updateFilterTitle(activeFilter);
 });

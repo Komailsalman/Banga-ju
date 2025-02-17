@@ -1719,7 +1719,6 @@ filter
     transition: 0.3s ease-in-out;
     color: #6F6F87;
          border: 1px solid rgba(255, 165, 0, 0.5); /* ✅ لون برتقالي فاتح */
-       margin-top: 10px; /* ✅ ينزل العناصر للأسفل بمقدار 10px */
 }
     .sb-filter .sb-filter-link:last-child {
       margin-right: 0; }

@@ -426,7 +426,10 @@ html.is-animating .sb-load {
 
 .sb-transition-fade {
   transition: 0.6s ease-in-out;
-  opacity: 1; }
+  opacity: 1; 
+margin-top: 5px;
+
+}
 
 html.is-animating .sb-transition-fade {
   opacity: 0; }
@@ -460,7 +463,8 @@ settings
 ***************************/
 .container {
   position: relative;
-  z-index: 2; }
+  z-index: 2; 
+}
 
 @media (max-width: 768px) {
   .container {
@@ -469,7 +473,8 @@ settings
   .swiper-container {
     overflow: visible; } }
 ::-webkit-scrollbar {
-  width: 5px; }
+  width: 5px;
+ }
 
 ::-webkit-scrollbar-track {
   background: #F2F3F5; }
@@ -724,10 +729,14 @@ top bar
   left: 0;  
   right: 0;
   border-bottom: solid 1px #F2F3F5;
-  border-top: solid 1px #F2F3F5; }
+  border-top: solid 1px #F2F3F5; 
+
+
+}
   .sb-top-bar-frame .container {
     padding: 0 !important;
-    position: static !important; }
+    position: static !important; 
+  }
   .sb-top-bar-frame .sb-top-bar-bg {
     position: absolute;
     z-index: 0;
@@ -1699,36 +1708,6 @@ gallery
 
 /***************************
 
-filter
-
-***************************/
-.sb-filter {
-  margin-bottom: 60px; }
-  .sb-filter .sb-filter-link {
-    padding: 0 20px;
-    font-weight: 500;
-    line-height: 55px;
-    cursor: pointer;
-    position: relative;
-    display: inline-block;
-    text-align: center;
-    height: 55px;
-    font-size: 14px;
-    margin-right: 10px;
-    background-color: #F2F3F5;
-    transition: 0.3s ease-in-out;
-    color: #6F6F87;
-         border: 1px solid rgba(255, 165, 0, 0.5); /* ✅ لون برتقالي فاتح */
-}
-    .sb-filter .sb-filter-link:last-child {
-      margin-right: 0; }
-    .sb-filter .sb-filter-link.sb-active {
-      background-color: #F5C332;
-      color: #231E41;
-    }
-    .sb-filter .sb-filter-link:hover {
-      filter: brightness(102%);
-      color: #231E41; }
 
 @media (max-width: 100px) {
   .sb-filter {
@@ -3378,7 +3357,7 @@ illustration 9
   white-space: nowrap;
   display: flex;
   flex-direction: row-reverse; /* لضمان أن العناصر تبدأ من اليمين */
-  padding: 15px 0;
+  padding: 15px 15px;
   scroll-behavior: smooth; /* جعل التمرير سلسًا */
   scrollbar-width: thin; /* التحكم في شكل شريط التمرير */
   scrollbar-color: #ffcc00 #f1f1f1;
@@ -3386,115 +3365,42 @@ illustration 9
   border-radius: 10px;
   width: 115%;
   transform: translateX(-6.5%); /* يجعله في المنتصف */
-
-  height: 160px;
+  height: 190px;
   
 }
 
 
-/* جعل القائمة نفسها تتبع اتجاه الكتابة العربي */
-.sb-filter {
-  display: flex;
-  gap: 10px;
-  flex-wrap: nowrap;
-  direction: rtl; /* ترتيب الأزرار من اليمين إلى اليسار */
-  padding-bottom: 10px;
-}
 
-/* جعل القائمة تتحرك داخل السكرول */
-.sb-filter {
-  display: flex;
-  gap: 10px;
-  flex-wrap: nowrap; /* منع الأزرار من النزول لسطر جديد */
-  padding-bottom: 10px;
-  
-}
 
-/* تصميم الأزرار */
-.sb-filter-link {
+/* جعل الأزرار تبدأ من اليمين مع تفعيل السكرول */
+.sb-filter-offer {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 15px;
   background-color: #ffcc00;
-  color: black;
   border-radius: 10px;
-  min-width: 140px; /* زيادة العرض لتحسين التنقل */
-  min-height: 50px;
-  font-size: 16px;
-  font-weight: bold;
-  text-decoration: none;
-  flex-shrink: 0;
-  text-align: center;
-  white-space: nowrap; /* منع النص من النزول لسطر جديد */
-}
-
-/* ضبط الزر النشط */
-.sb-filter-link.sb-active {
-  background-color: #ff9900;
-}
-
-/* تخصيص شريط التمرير */
-.sb-filter-wrapper::-webkit-scrollbar {
-  height: 5px;
-}
-
-.sb-filter-wrapper::-webkit-scrollbar-thumb {
-  background: #ffcc00;
-  border-radius: 5px;
-}
-
-.sb-filter-wrapper::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-/* جعل الأزرار عمودية بحيث تكون الصورة فوق النص */
-.sb-filter-link {
-  display: flex;
-  flex-direction: column; /* ترتيب العناصر عموديًا */
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  background-color: #ffcc00;
-  color: black;
-  border-radius: 10px;
-  min-width: 100px;
-  min-height: 100px; /* زيادة الطول حتى يكون هناك مساحة كافية */
-  font-size: 14px;
-  font-weight: bold;
-  text-decoration: none;
-  text-align: center;
-}
-
-/* ضبط حجم الصورة وضمان وجودها في الأعلى */
-.sb-filter-link img {
-  width: 150px; /* ضبط عرض الصورة */
-  height: 100px; /* ضبط ارتفاع الصورة */
-  object-fit: contain;
-  display: block;
-  filter: brightness(50%);
-  transition: 0.3s ease-in-out; /* تأثير انتقالي ناعم */
-}
-
-
-
-/* عند تنشيط الفلتر، تصبح الصورة عادية */
-.sb-filter .sb-filter-link.sb-active img {
-  filter: brightness(100%);
-}
-/* ضبط النص ليكون في الأسفل */
-.sb-filter-link span {
-  display: block;
   width: 100%;
-  text-align: center;
-}
-
-/* تصميم الزر النشط */
-.sb-filter-link.sb-active {
-  background-color: #ff9900;
+  height: 50px;
+  margin-top: 10px;
+  
 }
 
 
+  /* جعل القائمة نفسها تتبع اتجاه الكتابة العربي */
+  .sb-filter {
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap;
+    direction: rtl; /* ترتيب الأزرار من اليمين إلى اليسار */
+    padding-bottom: 10px;
+  }
+
+  /* جعل القائمة تتحرك داخل السكرول */
+  .sb-filter {
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap; /* منع الأزرار من النزول لسطر جديد */
+    padding-bottom: 10px;
+    
+  }
 
 
 .sb-top-bar {
@@ -3541,3 +3447,51 @@ illustration 9
   font-size: 16px;
   width: 300px;
 }
+
+
+
+.custom-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 120px; /* عرض الزر */
+  height: 160px; /* ارتفاع الزر */
+  background-color: transparent; /* الخلفية شفافة بشكل افتراضي */
+  border: 1px solid rgba(245, 195, 50, 0.5); /* حدود خفيفة بلون ذهبي شفاف */
+  border-radius: 10px; /* زوايا ناعمة */
+  text-decoration: none;
+  padding: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* ظل خفيف */
+  transition: 0.3s ease-in-out;
+  text-align: center;
+}
+
+/* الصورة داخل الزر */
+.custom-button img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* النص أسفل الصورة */
+.custom-button span {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #231E41;
+}
+
+/* 🔥 الزر عند التفعيل (نشط) */
+.custom-button.active {
+  background-color: #F5C332; /* خلفية ذهبية عند التفعيل */
+  border-color: #F5C332; /* حدود ذهبية عند التفعيل */
+  color: white;
+}
+
+.custom-button.active span {
+  color: #231E41; /* لون النص عند التفعيل */
+}
+
+

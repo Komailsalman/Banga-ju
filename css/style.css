@@ -161,7 +161,7 @@ badge
 ***************************/
 .sb-badge {
   position: absolute;
-  z-index: 2;
+  z-index: 1;
   top: 15px;
   left: 15px;
   background-color: #F5C332;
@@ -744,6 +744,7 @@ top bar
     left: 0;
     width: 100%;
     height: 100%;
+    
     background-color: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px); }
@@ -1148,7 +1149,10 @@ menu
     position: relative;
     padding-bottom: 100%;
     transition: 0.3s ease-in-out; 
-    border-radius: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
+
 }
     .sb-menu-item .sb-cover-frame img {
       width: 100%;
@@ -1171,21 +1175,22 @@ menu
     justify-content: space-between; /* يجعل الاسم في اليمين والسعر في اليسار */
     align-items: center;
     flex-direction: row-reverse; /* يجعل العناصر تتبع اتجاه RTL */
-    border-radius: 10px;
+    border-bottom-right-radius: 10px ;
 
   }
 
 /* جعل اسم المنتج يظهر على اليمين */
 .sb-menu-item .sb-card-tp .sb-card-title {
-  width: auto; /* يتيح التكيف حسب النص */
-  font-size: 15px;
-  font-weight: bold;
-  text-align: right; /* محاذاة النص إلى اليمين */
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* ✅ يسمح بسطرين فقط */
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  
+  font-size: 14px;
+  text-align: right; /* ✅ محاذاة النص إلى اليمين */
+  direction: rtl; /* ✅ يجعل النص يبدأ من اليمين */
+
 }
+
 
 /* جعل السعر يظهر أقصى اليسار */
 .sb-menu-item .sb-card-tp .sb-price {
@@ -1193,13 +1198,12 @@ menu
   height: 60px;
   font-weight: 500;
   background-color: #F5C332;
-  font-size: 24px;
+  font-size: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   flex-shrink: 0; /* يمنع السعر من التمدد */
-  border-top-left-radius:  10px;
   border-bottom-left-radius: 10px ;
 
 }
@@ -1207,7 +1211,7 @@ menu
 /* جعل وصف المنتج بارتفاع موحد */
 .sb-description {
   text-align: right;
-  height: 60px; /* ارتفاع موحد لجميع الأوصاف */
+  height: 40px; /* ارتفاع موحد لجميع الأوصاف */
   display: flex;
   align-items: center; /* محاذاة النص في الوسط */
   justify-content: right; /* جعل النص في أقصى اليمين */
@@ -1236,7 +1240,8 @@ menu
       .sb-menu-item.sb-menu-item-sm .sb-card-tp .sb-card-title {
         font-size: 14px;
         -webkit-line-clamp: 2;
-        line-clamp: 2; }
+        line-clamp: 2; 
+      }
       .sb-menu-item.sb-menu-item-sm .sb-card-tp .sb-price {
         font-size: 18px; }
         .sb-menu-item.sb-menu-item-sm .sb-card-tp .sb-price sub {
@@ -2276,9 +2281,11 @@ background
   height: 300%;
   overflow: hidden; }
   .sb-bg-1 div {
+    
     width: 100%;
     position: relative; }
     .sb-bg-1 div:after {
+      
       content: '';
       height: 40vw;
       width: 300%;
@@ -2289,6 +2296,7 @@ background
       transform: rotate(-30deg); }
 
 .sb-bg-2 {
+
   position: absolute;
   top: 0;
   width: 100%;
@@ -2319,6 +2327,7 @@ background
 
 @media (max-width: 768px) {
   .sb-bg-1 {
+    
     border-left: solid 15px #FFFFFF;
     border-right: solid 15px #FFFFFF; }
     .sb-bg-1 div:after {
@@ -3365,9 +3374,41 @@ illustration 9
   border-radius: 10px;
   width: 115%;
   transform: translateX(-6.5%); /* يجعله في المنتصف */
-  height: 190px;
+  height: 130px;
+  z-index: 9999;
   
 }
+
+
+
+/* عندما يصل إلى الأعلى يصبح ثابتًا */
+.sb-filter-wrapper.fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding-left: 80px;
+  transform: translateX(-13.5%); /* يجعله في المنتصف */
+  margin-top: 90px;
+
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* إضافة ظل */
+}
+
+
+
+.sb-content {
+  margin-top: 0; /* في الحالة الطبيعية يكون بدون هامش */
+}
+
+/* عندما يصبح الفلتر ثابتًا، يتم دفع المنتجات لأسفل */
+.sb-filter-wrapper.fixed + .sb-content {
+  margin-top: 190px; /* يساوي ارتفاع `sb-filter-wrapper` */
+}
+
+
+
+
+
 
 
 
@@ -3430,7 +3471,18 @@ illustration 9
   justify-content: center;
   align-items: center;
 }
+.sb-filter-title {
+  opacity: 0; /* ✅ مخفي افتراضيًا */
+  visibility: hidden;
+  transform: translateY(20px); /* ✅ سحبه للأسفل */
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
 
+.sb-filter-title.show {
+  opacity: 1; /* ✅ يصبح مرئي */
+  visibility: visible;
+  transform: translateY(0); /* ✅ رفعه للأعلى */
+}
 
 
 
@@ -3455,8 +3507,8 @@ illustration 9
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 120px; /* عرض الزر */
-  height: 160px; /* ارتفاع الزر */
+  width: 100px; /* عرض الزر */
+  height: 100px; /* ارتفاع الزر */
   background-color: transparent; /* الخلفية شفافة بشكل افتراضي */
   border: 1px solid rgba(245, 195, 50, 0.5); /* حدود خفيفة بلون ذهبي شفاف */
   border-radius: 10px; /* زوايا ناعمة */
@@ -3495,3 +3547,111 @@ illustration 9
 }
 
 
+
+
+
+
+/* ✅ ضبط البانر */
+.sb-banner {
+  position: relative;
+  width: 100%;
+  height: 200px; /* ✅ تثبيت الارتفاع */
+  overflow: hidden;
+}
+
+/* ✅ ضبط السلايدر */
+.swiper-container {
+  width: 100%;
+  height: 200px; /* ✅ تثبيت الارتفاع */
+}
+
+.swiper-slide {
+  position: relative;
+  width: 100%;
+  height: 200px; /* ✅ تثبيت الارتفاع */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+}
+
+.swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* ✅ تأكد من أن الصورة تملأ الإطار بدون تشويه */
+}
+
+/* ✅ تنسيق النص فوق الصورة */
+.sb-banner-text {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  padding: 10px 30px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+
+/* ✅ نقاط التنقل */
+.swiper-pagination-bullet {
+  background: #fff !important;
+  
+}
+@font-face {
+  font-family: 'Fontello';
+  src: url('fonts/fontello.woff2') format('woff2'),
+       url('fonts/fontello.woff') format('woff'),
+       url('fonts/fontello.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  font-family: 'Fontello' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+}
+/* ✅ تنسيق مربع البحث */
+/* ✅ تنسيق مربع البحث */
+.sb-search-container {
+  transform: translateX(-6.5%);
+
+  width: 115%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* ✅ عند تثبيت البحث */
+.sb-search-container.fixed {
+  transform: translateX(0.4%);
+
+  margin-top: 110px;
+  position: fixed;
+  top: 110px; /* اجعله بعد الفلتر */
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  background-color: white;
+  padding: 10px 0;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.sb-search-input {
+  width: 90%;
+  max-width: 400px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  text-align: right;
+}

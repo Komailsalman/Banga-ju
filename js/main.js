@@ -723,11 +723,11 @@ $(function() {
   });
 
 });
-
 document.addEventListener("DOMContentLoaded", function () {
   // العثور على جميع أزرار الفلتر
   var filterButtons = document.querySelectorAll(".custom-button");
   var filterTitle = document.querySelector(".sb-filter-title");
+  var searchInput = document.getElementById("sb-search"); // ✅ استهداف خانة البحث
 
   // دالة لتحديث العنوان عند تغيير الفلتر
   function updateFilterTitle(activeButton) {
@@ -736,7 +736,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
   }
 
-  // عند النقر على أي فلتر، يتم تحديث الاسم في التوب بار
+  // عند النقر على أي فلتر، يتم تحديث الاسم في التوب بار + حذف البحث
   filterButtons.forEach(function (button) {
       button.addEventListener("click", function (event) {
           event.preventDefault(); // منع الانتقال للرابط #
@@ -747,6 +747,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
           // تحديث عنوان `sb-filter-title` باسم الفلتر النشط
           updateFilterTitle(this);
+
+          // ✅ حذف محتوى البحث عند تغيير الفلتر
+          searchInput.value = "";
+          searchInput.dispatchEvent(new Event("input")); // ✅ لإعادة تصفية المنتجات بعد الحذف
       });
   });
 
@@ -840,7 +844,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const bannerHeight = banner ? banner.offsetHeight : 0;
 
   window.addEventListener("scroll", function () {
-      if (window.scrollY > bannerHeight) {
+      if (window.scrollY > bannerHeight+90) {
           filterWrapper.classList.add("fixed");
           searchL.classList.add("fixed");
 

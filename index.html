@@ -2,6 +2,7 @@
 <html lang="zxx">
 
 <head>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -21,9 +22,12 @@
   <link href="css/plugins/mapbox-style.css" rel='stylesheet'>
   <!-- fancybox css -->
   <link rel="stylesheet" href="css/plugins/fancybox.min.css">
+  <link rel="stylesheet" href="fonts/fontello.css">
+
   <!-- starbelly css -->
 
   <link rel="stylesheet" href="css/style.css">
+
 
 
 
@@ -54,28 +58,21 @@
           <div class="sb-filter-title">جميع المنتجات</div> <!-- هنا سيتم وضع اسم الفلتر النشط -->
         </div>
           <!-- menu -->
-                      <nav id="sb-dynamic-menu" class="sb-menu-transition">
-              <ul class="sb-navigation">
-                <li>
-                  <a href="home-1.html">Home</a>
-                </li>
-                <li>
-                  <a href="about-1.html">Pages</a>
-                </li>
-                <li >
-                  <a href="menu-1.html">Menu</a>
-                  <ul>
-                    <li><a href="menu-3.html">Menu style 3</a></li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="shop-1.html">Shop</a>
-                </li>
-                <li>
-                  <a href="contact.html">Contact</a>
-                </li>
-              </ul>
-            </nav>
+          <nav id="sb-dynamic-menu" class="sb-menu-transition">
+            <ul class="sb-navigation">
+              <li><a href="home-1.html" class="menu-link">Home</a></li>
+              <li><a href="about-1.html" class="menu-link">Pages</a></li>
+              <li>
+                <a href="menu-1.html" class="menu-link">Menu</a>
+                <ul class="submenu">
+                  <li><a href="menu-3.html" class="menu-link">Menu style 3</a></li>
+                </ul>
+              </li>
+              <li><a href="shop-1.html" class="menu-link">Shop</a></li>
+              <li><a href="contact.html" class="menu-link">Contact</a></li>
+            </ul>
+          </nav>
+          
            
               <!-- button end -->
               <!-- menu btn -->
@@ -94,12 +91,48 @@
     <div id="sb-dynamic-content" class="sb-transition-fade">
 
     
-     <!-- menu section 1 --><section class="sb-menu-section sb-p-90-60">
+     <!-- menu section 1 -->
+     
+     <section class="sb-menu-section sb-p-90-60">
   <div class="sb-bg-1">
   </div>
+
+
+    
+    <!-- BANNER -->
+    <div class="sb-banner">
+      <div class="swiper-container">
+          <div class="swiper-wrapper">
+              <!-- الشريحة 1 -->
+              <div class="swiper-slide">
+                  <img src="img/banner/banner1.jpg" >
+                  <div class="sb-banner-text">
+               </div>
+              </div>
+              <!-- الشريحة 2 -->
+              <div class="swiper-slide">
+                  <img src="img/banner/banner2.jpg" >
+                  <div class="sb-banner-text">
+                  </div>
+              </div>
+              <!-- الشريحة 3 -->
+              <div class="swiper-slide">
+                  <img src="img/banner/banner1.jpg" >
+                  <div class="sb-banner-text">
+                  </div>
+              </div>
+          </div>
+         
+          <!-- نقاط التنقل -->
+          <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  
+<!-- END BANNER -->
+
+
   <div class="container">
-    <!-- filter -->
-    <div class="sb-filter-wrapper">
+        <div class="sb-filter-wrapper">
       <div class="sb-filter">
         <a href="#." data-filter="*" class="custom-button active">
           <img src="img/menu/mainD/1.jpg" alt="جميع المنتجات">
@@ -107,52 +140,38 @@
         </a>
         <a href="#." data-filter=".main-dishes" class="custom-button">
           <img src="img/menu/mainD/1.jpg" alt="الخلطات الرئيسية">
-          <span>الخلطات الرئيسية</span>
+          <span>الخلطات</span>
         </a>
         <a href="#." data-filter=".refresh" class="custom-button">
-          <img src="img/menu/refresh/1.jpg" alt="العصيرات المنعشة">
-          <span>العصيرات المنعشة</span>
+          <img src="img/menu/mainD/1.jpg" alt="العصيرات المنعشة">
+          <span>المنعشة</span>
         </a>
         <a href="#." data-filter=".drinks" class="custom-button">
-          <img src="img/menu/refresh/2.jpg" alt="العصيرات الطبيعية">
-          <span>العصيرات الطبيعية</span>
+          <img src="img/menu/mainD/1.jpg" alt="العصيرات الطبيعية">
+          <span>الطبيعية</span>
         </a>
         <a href="#." data-filter=".desserts" class="custom-button">
           <img src="img/menu/mainD/1.jpg" alt="الفواكه والآيسكريمات">
           <span>الفواكه والآيسكريمات</span>
         </a>
       </div>
+      
+
+      
     </div>
 
-    <a data-fancybox="offers"
-    data-no-swup
-    href="img/offers/1.jpg"
-    class="sb-filter-offer"
-    style="
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        font-size: 18px;
-        font-weight: bold;
-        color: rgb(0, 0, 0);
-        animation: blink 3s infinite alternate;
-    ">
-    العروض والخصومات
-</a>
 
-<style>
-@keyframes blink {
-    0% { opacity: 1; } 
-    50% { opacity: 0.2; } 
-    100% { opacity: 1; }
-}
-</style>
-
+  <!-- ✅ مربع البحث أسفل الأقسام -->
+  <div class="sb-search-container">
+    <input type="text" id="sb-search" placeholder="🔍 ابحث عن المنتج..." class="sb-search-input">
+</div>
 
   </div>
 </section>
 
           <!-- filter end -->
+          <div class="sb-content">
+
           <div class="sb-masonry-grid">
             <div class="sb-grid-sizer"></div>
             <div class="sb-grid-item sb-item-25 main-dishes">
@@ -167,11 +186,12 @@
                 <div class="sb-cover-frame">
                   <img src="img/menu/mainD/1.jpg" alt="product">
                   <div class="sb-badge"><i class="fas fa-star"></i> الأكثر طلبًا</div>
+                  
 
                 </div>
                 <div class="sb-card-tp">
                   <h4 class="sb-card-title">خلطة بنقا </h4>
-                  <div class="sb-price"><sub> ريال</sub> 18</div>
+                  <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span>18</div>
                 </div>
                 <div class="sb-description">
                   <p class="sb-text sb-mb-15"><span>مانجو</span>, <span>أفوكادو</span>, <span>فراولة</span>, <span>خلطة خاصة</span>, <span>حبات الرمان  </span>, <span>آيسكريم</span></span>.</p>
@@ -187,7 +207,7 @@
                 </div>
                 <div class="sb-card-tp">
                   <h4 class="sb-card-title">عوار قلب </h4>
-                  <div class="sb-price"><sub> ريال</sub> 17</div>
+                  <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 17</div>
                 </div>
                 <div class="sb-description">
                   <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -203,7 +223,7 @@
                 </div>
                 <div class="sb-card-tp">
                   <h4 class="sb-card-title">عرايسي</h4>
-                  <div class="sb-price"><sub> ريال</sub> 17</div>
+                  <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 17</div>
                 </div>
                 <div class="sb-description">
                   <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -218,7 +238,7 @@
                 </div>
                 <div class="sb-card-tp">
                   <h4 class="sb-card-title">مانجو أفوكادو</h4>
-                  <div class="sb-price"><sub> ريال</sub> 17</div>
+                  <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 17</div>
                 </div>
                 <div class="sb-description">
                   <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -234,7 +254,7 @@
                 </div>
                 <div class="sb-card-tp">
                   <h4 class="sb-card-title">الطاقة</h4>
-                  <div class="sb-price"><sub> ريال</sub> 17</div>
+                  <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 17</div>
                 </div>
                 <div class="sb-description">
                   <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -249,7 +269,7 @@
                 </div>
                 <div class="sb-card-tp">
                   <h4 class="sb-card-title">أمواج</h4>
-                  <div class="sb-price"><sub> ريال</sub> 17</div>
+                  <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 17</div>
                 </div>
                 <div class="sb-description">
                   <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -264,7 +284,7 @@
                 </div>
                 <div class="sb-card-tp">
                   <h4 class="sb-card-title">فبراير</h4>
-                  <div class="sb-price"><sub> ريال</sub> 17</div>
+                  <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 17</div>
                 </div>
                 <div class="sb-description">
                   <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -279,7 +299,7 @@
                 </div>
                 <div class="sb-card-tp">
                   <h4 class="sb-card-title">غروب</h4>
-                  <div class="sb-price"><sub> ريال</sub> 17</div>
+                  <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 17</div>
                 </div>
                 <div class="sb-description">
                   <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -294,7 +314,7 @@
                   </div>
                   <div class="sb-card-tp">
                       <h4 class="sb-card-title"> الشاطئ الأصفر</h4>
-                      <div class="sb-price"><sub> ريال</sub> 14</div>
+                      <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 14</div>
                   </div>
                   <div class="sb-description">
                       <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -309,7 +329,7 @@
                   </div>
                   <div class="sb-card-tp">
                       <h4 class="sb-card-title"> نعنشة</h4>
-                      <div class="sb-price"><sub> ريال</sub> 9</div>
+                      <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 9</div>
                   </div>
                   <div class="sb-description">
                       <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -324,7 +344,7 @@
                   </div>
                   <div class="sb-card-tp">
                       <h4 class="sb-card-title">ليمون نعناع</h4>
-                      <div class="sb-price"><sub> ريال</sub> 17</div>
+                      <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 17</div>
                   </div>
                   <div class="sb-description">
                       <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -339,7 +359,7 @@
                   </div>
                   <div class="sb-card-tp">
                       <h4 class="sb-card-title">شمندر بالبرتقال</h4>
-                      <div class="sb-price"><sub> ريال</sub> 17</div>
+                      <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 17</div>
                   </div>
                   <div class="sb-description">
                       <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -354,7 +374,7 @@
                   </div>
                   <div class="sb-card-tp">
                       <h4 class="sb-card-title">شمندر بالرمان </h4>
-                      <div class="sb-price"><sub> ريال</sub> 13</div>
+                      <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 13</div>
                   </div>
                   <div class="sb-description">
                       <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -369,7 +389,7 @@
                   </div>
                   <div class="sb-card-tp">
                       <h4 class="sb-card-title">شمندر بالبرتقال والرمان</h4>
-                      <div class="sb-price"><sub> ريال</sub> 14</div>
+                      <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 14</div>
                   </div>
                   <div class="sb-description">
                       <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -384,7 +404,7 @@
                   </div>
                   <div class="sb-card-tp">
                       <h4 class="sb-card-title">شمندر بالجزر</h4>
-                      <div class="sb-price"><sub> ريال</sub> 11</div>
+                      <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 11</div>
                   </div>
                   <div class="sb-description">
                       <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -399,7 +419,7 @@
                   </div>
                   <div class="sb-card-tp">
                       <h4 class="sb-card-title">شمندر بالتفاح</h4>
-                      <div class="sb-price"><sub> ريال</sub> 14</div>
+                      <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 14</div>
                   </div>
                   <div class="sb-description">
                       <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -412,13 +432,13 @@
 
 
             <div class="sb-grid-item sb-item-25 drinks">
-              <a data-fancybox="menu" data-no-swup href="img/menu/15.jpg" class="sb-menu-item sb-mb-30">
+              <a data-fancybox="menu" data-no-swup href="img/menu/mainD/1.jpg" class="sb-menu-item sb-mb-30">
                 <div class="sb-cover-frame">
-                  <img src="img/menu/15.jpg" alt="product">
+                  <img src="img/menu/mainD/1.jpg" alt="product">
                 </div>
                 <div class="sb-card-tp">
                   <h4 class="sb-card-title">Stracciatella</h4>
-                  <div class="sb-price"><sub> ريال</sub> 11</div>
+                  <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 11</div>
                 </div>
                 <div class="sb-description">
                   <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -427,13 +447,13 @@
               </a>
             </div>
             <div class="sb-grid-item sb-item-25 desserts">
-              <a data-fancybox="menu" data-no-swup href="img/menu/5.jpg" class="sb-menu-item sb-mb-30">
+              <a data-fancybox="menu" data-no-swup href="img/menu/mainD/1.jpg" class="sb-menu-item sb-mb-30">
                 <div class="sb-cover-frame">
-                  <img src="img/menu/5.jpg" alt="product">
+                  <img src="img/menu/mainD/1.jpg" alt="product">
                 </div>
                 <div class="sb-card-tp">
                   <h4 class="sb-card-title">Carpaccio de daurade</h4>
-                  <div class="sb-price"><sub> ريال</sub> 6</div>
+                  <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 6</div>
                 </div>
                 <div class="sb-description">
                   <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -442,13 +462,13 @@
               </a>
             </div>
             <div class="sb-grid-item sb-item-25 drinks">
-              <a data-fancybox="menu" data-no-swup href="img/menu/14.jpg" class="sb-menu-item sb-mb-30">
+              <a data-fancybox="menu" data-no-swup href="img/menu/mainD/1.jpg" class="sb-menu-item sb-mb-30">
                 <div class="sb-cover-frame">
-                  <img src="img/menu/14.jpg" alt="product">
+                  <img src="img/menu/mainD/1.jpg" alt="product">
                 </div>
                 <div class="sb-card-tp">
                   <h4 class="sb-card-title">Chevrefrit au miel</h4>
-                  <div class="sb-price"><sub> ريال</sub> 14</div>
+                  <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 14</div>
                 </div>
                 <div class="sb-description">
                   <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -458,13 +478,13 @@
             </div>
            
             <div class="sb-grid-item sb-item-25 desserts">
-              <a data-fancybox="menu" data-no-swup href="img/menu/8.jpg" class="sb-menu-item sb-mb-30">
+              <a data-fancybox="menu" data-no-swup href="img/menu/mainD/1.jpg" class="sb-menu-item sb-mb-30">
                 <div class="sb-cover-frame">
-                  <img src="img/menu/8.jpg" alt="product">
+                  <img src="img/menu/mainD/1.jpg" alt="product">
                 </div>
                 <div class="sb-card-tp">
                   <h4 class="sb-card-title">Carpaccio de daurade</h4>
-                  <div class="sb-price"><sub> ريال</sub> 6</div>
+                  <div class="sb-price"><span class="icon-saudi_riyal_symbol-2"></span> 6</div>
                 </div>
                 <div class="sb-description">
                   <p class="sb-text sb-mb-15"><span> مانجو ، فراولة ، آيسكريم</span></p>
@@ -472,7 +492,8 @@
                 </div>
               </a>
             </div>
-          </div>
+          </div>          </div>
+
         </div>
       </section>
       <!-- menu end -->

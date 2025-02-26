@@ -724,35 +724,169 @@ $(function() {
 
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+  // العثور على جميع أزرار الفلتر
+  var filterButtons = document.querySelectorAll(".custom-button");
+  var filterTitle = document.querySelector(".sb-filter-title");
+
+  // دالة لتحديث العنوان عند تغيير الفلتر
+  function updateFilterTitle(activeButton) {
+      if (activeButton) {
+          filterTitle.textContent = activeButton.querySelector("span").textContent; // تحديث النص في الـ top bar
+      }
+  }
+
+  // عند النقر على أي فلتر، يتم تحديث الاسم في التوب بار
+  filterButtons.forEach(function (button) {
+      button.addEventListener("click", function (event) {
+          event.preventDefault(); // منع الانتقال للرابط #
+
+          // إزالة `active` من جميع الأزرار وإضافتها إلى الزر النشط
+          filterButtons.forEach(btn => btn.classList.remove("active"));
+          this.classList.add("active");
+
+          // تحديث عنوان `sb-filter-title` باسم الفلتر النشط
+          updateFilterTitle(this);
+      });
+  });
+
+  // تعيين الاسم المبدئي بناءً على الفلتر النشط عند تحميل الصفحة
+  var activeFilter = document.querySelector(".custom-button.active");
+  updateFilterTitle(activeFilter);
+});
+
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    // العثور على جميع أزرار الفلتر
-    var filterButtons = document.querySelectorAll(".custom-button");
-    var filterTitle = document.querySelector(".sb-filter-title");
+  const filterTitle = document.querySelector(".sb-filter-title");
 
-    // دالة لتحديث العنوان عند تغيير الفلتر
-    function updateFilterTitle(activeButton) {
-        if (activeButton) {
-            filterTitle.textContent = activeButton.querySelector("span").textContent; // تحديث النص في الـ top bar
-        }
-    }
+  window.addEventListener("scroll", function () {
+      if (window.scrollY > 300) { // ✅ عند التمرير 100 بكسل للأسفل
+          filterTitle.classList.add("show");
+      } else {
+          filterTitle.classList.remove("show");
+      }
+  });
+});
 
-    // عند النقر على أي فلتر، يتم تحديث الاسم في التوب بار
-    filterButtons.forEach(function (button) {
-        button.addEventListener("click", function (event) {
-            event.preventDefault(); // منع الانتقال للرابط #
 
-            // إزالة `active` من جميع الأزرار وإضافتها إلى الزر النشط
-            filterButtons.forEach(btn => btn.classList.remove("active"));
-            this.classList.add("active");
 
-            // تحديث عنوان `sb-filter-title` باسم الفلتر النشط
-            updateFilterTitle(this);
-        });
+document.addEventListener("DOMContentLoaded", function () {
+  // استهداف جميع الروابط في القائمة
+  const menuLinks = document.querySelectorAll(".menu-link");
+
+  menuLinks.forEach(link => {
+      link.addEventListener("click", function (event) {
+          event.preventDefault(); // منع الانتقال الفوري للرابط
+
+          // تحديث الصفحة يدويًا بدون مشاكل Swup
+          window.location.href = this.getAttribute("href");
+      });
+  });
+
+  // ✅ دعم القوائم الفرعية (تفتح عند النقر)
+  const menuItems = document.querySelectorAll(".sb-navigation li > a");
+
+  menuItems.forEach(item => {
+      item.addEventListener("click", function (event) {
+          let submenu = this.nextElementSibling; // البحث عن القائمة الفرعية
+          if (submenu && submenu.classList.contains("submenu")) {
+              event.preventDefault(); // منع الانتقال إلى الصفحة إذا كان هناك قائمة فرعية
+              submenu.classList.toggle("active"); // عرض/إخفاء القائمة الفرعية
+          }
+      });
+  });
+});
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    var swiper = new Swiper('.swiper-container', {
+        loop: true, // ✅ تشغيل التكرار التلقائي
+        autoplay: {
+            delay: 3000, // ✅ تمرير الصورة تلقائيًا كل 3 ثوانٍ
+            disableOnInteraction: false, // ✅ السماح بالسحب باليد
+        },
+        slidesPerView: 1, // ✅ عرض صورة واحدة فقط في كل مرة
+        spaceBetween: 0, // ✅ بدون مسافات إضافية بين الصور
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true, // ✅ السماح بالتنقل عبر النقاط فقط
+        },
+        // ✅ إلغاء أزرار التحكم وجعل التمرير بالسحب فقط
+        navigation: false,
+        allowTouchMove: true, // ✅ السماح بالسحب يمين/يسار
+        grabCursor: true, // ✅ تغيير مؤشر الماوس ليشعر المستخدم أنه يمكنه السحب
     });
+});
 
-    // تعيين الاسم المبدئي بناءً على الفلتر النشط عند تحميل الصفحة
-    var activeFilter = document.querySelector(".custom-button.active");
-    updateFilterTitle(activeFilter);
+
+
+
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const filterWrapper = document.querySelector(".sb-filter-wrapper");
+  const content = document.querySelector(".sb-content");
+  const banner = document.querySelector(".sb-banner");
+  const searchL = document.querySelector(".sb-search-container");
+
+  const bannerHeight = banner ? banner.offsetHeight : 0;
+
+  window.addEventListener("scroll", function () {
+      if (window.scrollY > bannerHeight) {
+          filterWrapper.classList.add("fixed");
+          searchL.classList.add("fixed");
+
+          content.style.marginTop = "200px"; // ✅ دفع المنتجات للأسفل
+      } else {
+          filterWrapper.classList.remove("fixed");
+          searchL.classList.remove("fixed");
+
+          content.style.marginTop = "0"; // ✅ إزالة التأثير عند العودة للأعلى
+      }
+  });
+});
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const searchInput = document.getElementById("sb-search");
+  const $grid = $('.sb-masonry-grid').isotope({
+      itemSelector: '.sb-grid-item',
+      layoutMode: 'masonry'
+  });
+
+  searchInput.addEventListener("input", function () {
+      let query = searchInput.value.toLowerCase().trim();
+
+      $grid.isotope({
+          filter: function () {
+              let $this = $(this); // ✅ تحويل `itemElem` إلى عنصر jQuery
+              let titleElement = $this.find(".sb-card-title");
+              let descriptionElement = $this.find(".sb-description");
+
+              let titleText = titleElement.length > 0 ? titleElement.text().toLowerCase() : "";
+              let descriptionText = descriptionElement.length > 0 ? descriptionElement.text().toLowerCase() : "";
+
+              // ✅ إظهار المنتج إذا كان البحث مطابقًا للعنوان أو الوصف
+              return titleText.includes(query) || descriptionText.includes(query);
+          }
+      });
+  });
+
+  // ✅ إعادة إظهار جميع المنتجات عند مسح البحث
+  searchInput.addEventListener("keyup", function () {
+      if (searchInput.value === "") {
+          $grid.isotope({ filter: '*' });
+      }
+  });
 });

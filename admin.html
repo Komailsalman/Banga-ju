@@ -1,0 +1,971 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة إدارة عصيرات بنقا</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #f8f9fb;
+            color: #2c3e50;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #F5C332, #F0B429);
+            padding: 25px;
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            color: #F5C332;
+            padding: 10px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-size: 16px;
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+        .tab-btn.active {
+            background: #F5C332;
+            color: #fff;
+            box-shadow: 0 10px 24px rgba(245, 195, 50, 0.25);
+        }
+
+        .tab-content {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            margin-bottom: 25px;
+        }
+
+        .hidden { display: none; }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+
+        .form-group { margin-bottom: 14px; }
+        label { font-weight: 700; font-size: 14px; color: #2c3e50; }
+
+        .form-control, select, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+            background: #fff;
+            outline: none;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #F5C332;
+            box-shadow: 0 0 0 3px rgba(245, 195, 50, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #F5C332, #F0B429);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover { filter: brightness(0.97); transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+        .btn-secondary { background: #1c2430; }
+        .btn-danger { background: #e74c3c; }
+
+        .item-card {
+            padding: 14px;
+            border: 1px solid #f0f1f3;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            background: #fff;
+        }
+
+        .item-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+        .item-title { font-weight: 800; color: #2c3e50; font-size: 16px; }
+        .item-actions { display: flex; gap: 8px; }
+
+        .info {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid #f0f1f3;
+            text-align: center;
+        }
+        .stat-box h3{ margin: 4px 0 0; font-size: 22px; }
+        .stat-box small{ color:#6c757d; }
+
+        .sizes-list .size-item, .extras-list .extra-item {
+            display: flex; gap: 10px; align-items: center; margin-bottom: 10px;
+        }
+        .size-inputs { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 10px; }
+        .extra-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        .success-message {
+            background: #e8f9ef;
+            border: 1px solid #c9f0d7;
+            color: #0f5132;
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .kpis {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 12px;
+            margin: 18px 0;
+        }
+
+        .kpi {
+            background: white;
+            border: 1px solid #f0f1f3;
+            border-radius: 12px;
+            padding: 14px;
+        }
+        .kpi label{ color:#6c757d; font-size:12px }
+        .kpi strong{ font-size:22px }
+
+        @media (max-width: 900px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .info { grid-template-columns: 1fr; }
+            .kpis { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+                <div>
+                    <h1>لوحة إدارة عصيرات بنقا</h1>
+                    <p>إدارة التصنيفات والمنتجات والأحجام والإضافات</p>
+                </div>
+                <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-right"></i> الرجوع للمنيو</a>
+            </div>
+        </div>
+
+        <div class="admin-tabs">
+            <button class="tab-btn active" data-tab="dashboard"><i class="fa-solid fa-chart-simple"></i> المؤشرات</button>
+            <button class="tab-btn" data-tab="categories"><i class="fa-solid fa-tags"></i> التصنيفات</button>
+            <button class="tab-btn" data-tab="products"><i class="fa-solid fa-mug-hot"></i> المنتجات</button>
+            <button class="tab-btn" data-tab="banners"><i class="fa-solid fa-image"></i> البنرات</button>
+
+        </div>
+
+        <div id="dashboard" class="tab-content">
+            <div class="kpis">
+                <div class="kpi"><label>عدد التصنيفات</label><div><strong id="totalCategories">0</strong></div></div>
+                <div class="kpi"><label>عدد المنتجات</label><div><strong id="totalProducts">0</strong></div></div>
+                <div class="kpi"><label>منتجات فعّالة</label><div><strong id="activeProducts">0</strong></div></div>
+            </div>
+            <div class="info">
+                <div class="stat-box">
+                    <div style="color:#6c757d">حالة الاتصال</div>
+                    <div id="connectionStatus" style="font-weight:800;margin-top:6px">—</div>
+                </div>
+                <div class="stat-box">
+                    <div style="color:#6c757d">نسخة البيانات</div>
+                    <div style="font-weight:800;margin-top:6px">Google Sheets</div>
+                </div>
+                <div class="stat-box">
+                    <div style="color:#6c757d">تاريخ التحديث</div>
+                    <div id="lastUpdate" style="font-weight:800;margin-top:6px">—</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="categories" class="tab-content hidden">
+            <div class="grid-2">
+                <div>
+                    <h3>إضافة تصنيف جديد</h3>
+                    <form id="categoryForm">
+                        <div class="form-group">
+                            <label>اسم التصنيف</label>
+                            <input type="text" id="categoryName" class="form-control" placeholder="مثل: عصيرات طازجة" required>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>أيقونة (Font Awesome)</label>
+                                <input type="text" id="categoryIcon" class="form-control" placeholder="fa-solid fa-wine-glass">
+                            </div>
+                            <div class="form-group">
+                                <label>اللون</label>
+                                <input type="color" id="categoryColor" class="form-control" value="#F5C332">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>صورة التصنيف (اختياري)</label>
+                            <input type="file" id="categoryImage" class="form-control" accept="image/*">
+                        </div>
+                        <div style="display:flex;gap:10px;align-items:center">
+                            <button class="btn" type="submit"><i class="fa-solid fa-floppy-disk"></i> حفظ</button>
+                            <button class="btn btn-secondary" type="button" id="categoryResetBtn">تفريغ</button>
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <h3>جميع التصنيفات</h3>
+                    <div id="categoriesList"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="products" class="tab-content hidden">
+            <div class="grid-2">
+                <div>
+                    <h3>إضافة / تعديل منتج</h3>
+                    <form id="productForm">
+                        <div class="form-group">
+                            <label>اسم المنتج</label>
+                            <input id="productName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>الوصف</label>
+                            <textarea id="productDescription" class="form-control" rows="2"></textarea>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>التصنيف</label>
+                                <select id="productCategory" class="form-control" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label>شارة (اختياري)</label>
+                                <input id="productBadge" class="form-control" placeholder="الأكثر طلبًا">
+                            </div>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>الصورة</label>
+                                <input type="file" id="productImage" class="form-control" accept="image/*">
+                            </div>
+                            <div class="form-group" style="display:flex;align-items:center;gap:10px">
+                                <input type="checkbox" id="productAvailable" checked>
+                                <label for="productAvailable" style="margin:0">متاح للطلب</label>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h4 style="margin-bottom:10px">الأحجام</h4>
+                            <div id="sizesList" class="sizes-list"></div>
+                            <button class="btn btn-secondary" type="button" onclick="addSizeItem()"><i class="fa-solid fa-plus"></i> إضافة حجم</button>
+                        </div>
+
+                        <div class="card" style="margin-top:12px">
+                            <h4 style="margin-bottom:10px">الإضافات</h4>
+                            <div id="extrasList" class="extras-list"></div>
+                            <button class="btn btn-secondary" type="button" onclick="addExtraItem()"><i class="fa-solid fa-plus"></i> إضافة خيار</button>
+                        </div>
+
+                        <div style="display:flex;gap:10px;margin-top:12px">
+                            <button id="saveProductBtn" class="btn" type="submit"><i class="fa-solid fa-floppy-disk"></i> حفظ منتج</button>
+                            <button id="updateProductBtn" class="btn" type="button" style="display:none"><i class="fa-solid fa-rotate"></i> تحديث</button>
+                            <button id="cancelEditBtn" class="btn btn-secondary" type="button" style="display:none">إلغاء التعديل</button>
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <h3>جميع المنتجات</h3>
+                    <div style="display:flex;gap:8px;margin-bottom:10px">
+                        <input id="productSearch" class="form-control" placeholder="ابحث باسم المنتج…">
+                        <button id="btnSearch" class="btn" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        <button id="btnClearSearch" class="btn btn-secondary" type="button">مسح</button>
+                    </div>
+                    <div id="productsList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="banners" class="tab-content hidden">
+        <h3>إضافة / تعديل البنرات</h3>
+      
+        <form id="bannerForm">
+          <div class="form-group">
+            <label>صورة البنر</label>
+            <input type="file" id="bannerImage" class="form-control" accept="image/*">
+          </div>
+      
+          <div id="bannerPreviewContainer" style="display:none; margin-top:12px;">
+            <label>معاينة (اسحب/كبّر لاختيار الجزء المعروض)</label>
+            <div style="max-width:560px; border:1px solid #eee; border-radius:8px; overflow:hidden;">
+              <img id="bannerPreview" style="max-width:100%; display:block;">
+            </div>
+          </div>
+      
+          <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+            <input type="text" id="bannerTitle" class="form-control" placeholder="عنوان البنر (اختياري)" style="flex:1 1 220px;">
+            <input type="text" id="bannerSubtitle" class="form-control" placeholder="وصف/سطر ثانٍ (اختياري)" style="flex:1 1 220px;">
+            <input type="text" id="bannerAlt" class="form-control" placeholder="نص بديل ALT (اختياري)" style="flex:1 1 220px;">
+          </div>
+      
+          <div style="margin-top:14px; display:flex; gap:10px;">
+            <button type="submit" class="btn"><i class="fa-solid fa-upload"></i> رفع البنر</button>
+            <button type="button" class="btn btn-secondary" id="bannerResetBtn">تفريغ</button>
+          </div>
+        </form>
+      
+        <hr style="margin:20px 0;">
+        <h4>جميع البنرات</h4>
+        <div id="bannersList" class="grid" style="grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap:12px;"></div>
+
+      </div>
+      
+    
+    <script>
+        // تبويبات الواجهة
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+                document.getElementById(btn.dataset.tab).classList.remove('hidden');
+            });
+        });
+
+        // بيانات افتراضية (لن تُستخدم بعد ربط Google Sheets لكن تحافظ على شكل الواجهة)
+        const defaultData = {
+            categories: [
+                { id: 1, name: 'عصيرات طازجة', icon: 'fa-solid fa-blender', color: '#F5C332', image: null },
+                { id: 2, name: 'كوكتيلات', icon: 'fa-solid fa-martini-glass-citrus', color: '#F5C332', image: null },
+            ],
+            products: []
+        };
+
+        let menuData = { categories: [], products: [] };
+        let editingProductId = null;
+
+        // تعطيل التخزين المحلي
+        function saveData(){ /* storage disabled: now using Google Sheets API */ }
+
+        // إحصائيات
+        function updateStats() {
+            document.getElementById('totalProducts').textContent = menuData.products.length;
+            document.getElementById('totalCategories').textContent = menuData.categories.length;
+            document.getElementById('activeProducts').textContent = menuData.products.filter(p => p.available !== false).length;
+            document.getElementById('connectionStatus').textContent = 'متصل';
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+        }
+
+        function showSuccessMessage(message) {
+            const existingMessage = document.querySelector('.success-message');
+            if (existingMessage) existingMessage.remove();
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'success-message';
+            messageDiv.innerHTML = `<i class="fas fa-check-circle"></i>${message}`;
+            const currentTab = document.querySelector('.tab-content:not(.hidden)');
+            currentTab.insertBefore(messageDiv, currentTab.children[1]);
+            setTimeout(() => messageDiv.remove(), 3000);
+        }
+
+        // تصنيفات
+        function displayAdminCategories() {
+            const list = document.getElementById('categoriesList');
+            list.innerHTML = menuData.categories.map(category => `
+                <div class="item-card">
+                    <div class="item-header">
+                        <div class="item-title">
+                            <i class="${category.icon}" style="color: ${category.color}; margin-left: 10px;"></i>
+                            ${category.name}
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-danger" onclick="deleteCategory(${category.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // تعبئة خيارات التصنيف في نموذج المنتج
+        function updateProductCategoryOptions() {
+            const select = document.getElementById('productCategory');
+            select.innerHTML = menuData.categories.map(category => 
+                `<option value="${category.id}">${category.name}</option>`
+            ).join('');
+        }
+
+        // فورم التصنيف (سيُعاد ربطه في التعديلات السفلية ليكتب إلى Google Sheets)
+        document.getElementById('categoryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // يُستبدل التعامل هنا إلى الواجهات المضافة أدناه (GAS overrides)
+        });
+
+        // منتجات
+        function displayAdminProducts() {
+            const list = document.getElementById('productsList');
+            list.innerHTML = menuData.products.map(product => {
+                const category = menuData.categories.find(cat => cat.id === product.categoryId);
+                const sizes = product.sizes || [];
+                const basePrice = sizes.length > 0 ? sizes[0].price : 0;
+                return `
+                    <div class="item-card">
+                        <div class="item-header">
+                            <div class="item-title">
+                                ${product.name}
+                                ${!product.available ? '<span style="color:#e74c3c;font-size:14px"> (غير متوفر)</span>' : ''}
+                            </div>
+                            <div class="item-actions">
+                                <button class="btn" onclick="editProduct(${product.id})"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger" onclick="deleteProduct(${product.id})"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <p style="color:#6c757d;margin-bottom:10px">${product.description||''}</p>
+                        <div style="display:flex;gap:8px;align-items:center;color:#6c757d">
+                            <i class="fa-solid fa-layer-group"></i>
+                            <span>${category ? category.name : '—'}</span>
+                            <span style="margin-inline-start:auto">ابتداءً من <strong>${Number(basePrice||0).toFixed(2)}</strong></span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // بحث
+        document.getElementById('btnSearch').addEventListener('click', function(){ displayAdminProducts(); });
+        document.getElementById('btnClearSearch').addEventListener('click', function(){ document.getElementById('productSearch').value=''; displayAdminProducts(); });
+
+        // عناصر أحجام وإضافات ديناميكية
+        function addSizeItem() {
+            const sizesList = document.getElementById('sizesList');
+            const sizeItem = document.createElement('div');
+            sizeItem.className = 'size-item';
+            sizeItem.innerHTML = `
+                <div class="size-inputs">
+                    <input type="text" placeholder="اسم الحجم" class="size-name">
+                    <input type="text" placeholder="الوصف" class="size-desc">
+                    <input type="number" placeholder="السعر" class="size-price" min="0" step="0.5">
+                </div>
+                <button type="button" class="btn btn-danger" onclick="removeSizeItem(this)"><i class="fas fa-trash"></i></button>
+            `;
+            sizesList.appendChild(sizeItem);
+        }
+        function removeSizeItem(btn){ btn.closest('.size-item').remove(); }
+
+        function addExtraItem() {
+            const extrasList = document.getElementById('extrasList');
+            const extraItem = document.createElement('div');
+            extraItem.className = 'extra-item';
+            extraItem.innerHTML = `
+                <div class="extra-inputs">
+                    <input type="text" placeholder="اسم الإضافة" class="extra-name">
+                    <input type="number" placeholder="السعر" class="extra-price" min="0" step="0.5">
+                </div>
+                <button type="button" class="btn btn-danger" onclick="removeExtraItem(this)"><i class="fas fa-trash"></i></button>
+            `;
+            extrasList.appendChild(extraItem);
+        }
+        function removeExtraItem(btn){ btn.closest('.extra-item').remove(); }
+
+        // نموذج المنتج (سيتم ظِلّياً استبدال addOrUpdateProduct أدناه)
+        document.getElementById('productForm').addEventListener('submit', function(e){ e.preventDefault(); addOrUpdateProduct(); });
+        document.getElementById('updateProductBtn').addEventListener('click', function(){ addOrUpdateProduct(); });
+
+        function editProduct(id) {
+            const product = menuData.products.find(p => p.id === id);
+            if (!product) return;
+            window.editingProductId = id;
+            document.getElementById('productName').value = product.name || '';
+            document.getElementById('productDescription').value = product.description || '';
+            document.getElementById('productCategory').value = product.categoryId || '';
+            document.getElementById('productBadge').value = product.badge || '';
+            document.getElementById('productAvailable').checked = product.available !== false;
+            // تعبئة الأحجام والإضافات
+            const sizesList = document.getElementById('sizesList'); sizesList.innerHTML='';
+            (product.sizes||[]).forEach(s=>{
+                const wrap = document.createElement('div'); wrap.className='size-item';
+                wrap.innerHTML = `
+                  <div class="size-inputs">
+                    <input class="size-name" value="${s.name||''}" placeholder="اسم الحجم">
+                    <input class="size-desc" value="${s.description||''}" placeholder="الوصف">
+                    <input class="size-price" value="${s.price||''}" type="number" min="0" step="0.5" placeholder="السعر">
+                  </div>
+                  <button type="button" class="btn btn-danger" onclick="removeSizeItem(this)"><i class="fas fa-trash"></i></button>`;
+                sizesList.appendChild(wrap);
+            });
+            const extrasList = document.getElementById('extrasList'); extrasList.innerHTML='';
+            (product.extras||[]).forEach(x=>{
+                const wrap = document.createElement('div'); wrap.className='extra-item';
+                wrap.innerHTML = `
+                  <div class="extra-inputs">
+                    <input class="extra-name" value="${x.name||''}" placeholder="اسم الإضافة">
+                    <input class="extra-price" value="${x.price||''}" type="number" min="0" step="0.5" placeholder="السعر">
+                  </div>
+                  <button type="button" class="btn btn-danger" onclick="removeExtraItem(this)"><i class="fas fa-trash"></i></button>`;
+                extrasList.appendChild(wrap);
+            });
+            document.getElementById('saveProductBtn').style.display='none';
+            document.getElementById('updateProductBtn').style.display='inline-block';
+            document.getElementById('cancelEditBtn').style.display='inline-block';
+        }
+
+        function resetProductForm(){
+            window.editingProductId = null;
+            document.getElementById('productForm').reset();
+            document.getElementById('sizesList').innerHTML='';
+            document.getElementById('extrasList').innerHTML='';
+            document.getElementById('saveProductBtn').style.display='inline-block';
+            document.getElementById('updateProductBtn').style.display='none';
+            document.getElementById('cancelEditBtn').style.display='none';
+        }
+
+        document.getElementById('cancelEditBtn').addEventListener('click', resetProductForm);
+
+        // =============== Google Sheets API Client (كما في ملفك الأصلي) ===============
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw7moDYoyzYs2fQsnV3JMidVzvK132xJEp0JAcVNj8ocgMJQl0E_8jE1YoSPnPZgxZQWw/exec';
+
+        // يرفع الصورة إلى مجلد Google Drive عبر أكشن uploadImage ويعيد رابط عرض مباشر
+async function uploadToDrive(input){
+  const f = (input && input.files) ? input.files[0] : input;
+  if (!f) return null;
+  const dataURL = await new Promise((res, rej)=>{ 
+    const r = new FileReader(); 
+    r.onload = () => res(r.result); 
+    r.onerror = rej; 
+    r.readAsDataURL(f); 
+  });
+  const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=uploadImage`, {
+    method:'POST',
+    headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+    body: JSON.stringify({ filename: f.name, mimeType: f.type, dataURL })
+  });
+  const json = await res.json();
+  if (!json || json.success === false) throw new Error('Upload failed');
+  return json.viewUrl; // هذا اللي نحفظه في حقل image
+}
+
+
+        class BanqaSheetsAPI {
+            constructor(scriptUrl){ this.url = scriptUrl; }
+            async get(action, params={}){
+                const qs = new URLSearchParams({ action, ...params }).toString();
+                const res = await fetch(`${this.url}?${qs}`); return await res.json();
+            }
+            async addBanner(data) {
+    return this.post('addBanner', data);
+}
+
+
+            async post(action, data={}){
+                const res = await fetch(`${this.url}?action=${encodeURIComponent(action)}`,{
+                    method:'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(data)
+                });
+                return await res.json();
+            }
+            async getAllData(){ return this.get('getAllData'); }
+            async addCategory(data){ return this.post('addCategory', data); }
+            async updateCategory(data){ return this.post('updateCategory', data); }
+            async deleteCategory(data){ return this.post('deleteCategory', data); }
+            async addProduct(data){ return this.post('addProduct', data); }
+            async updateProduct(data){ return this.post('updateProduct', data); }
+            async deleteProduct(data){ return this.post('deleteProduct', data); }
+            async checkConnection(){ try{ const r=await this.get('getCategories'); return !!r.success; }catch{ return false; } }
+        }
+
+        const sheetsAPI = new BanqaSheetsAPI(GOOGLE_SCRIPT_URL);
+        const MenuAPI = {
+            async getAllData(){ return (await sheetsAPI.getAllData()).data; },
+            async addCategory(c){ return await sheetsAPI.addCategory(c); },
+            async updateCategory(c){ return await sheetsAPI.updateCategory(c); },
+            async deleteCategory(p){ return await sheetsAPI.deleteCategory(p); },
+            async addProduct(p){ return await sheetsAPI.addProduct(p); },
+            async updateProduct(p){ return await sheetsAPI.updateProduct(p); },
+            async deleteProduct(p){ return await sheetsAPI.deleteProduct(p); },
+            async isOnline(){ return await sheetsAPI.checkConnection(); },
+            async addBanner(b) { return await sheetsAPI.addBanner(b); }
+
+        };
+
+/* ==== Banqa GAS overrides: use Google Sheets instead of localStorage while keeping UI intact ==== */
+(function(){
+  async function reloadAll(){
+    try{
+      const data = await MenuAPI.getAllData();
+      if (data && (data.categories || data.products)) {
+        menuData = { categories: data.categories||[], products: data.products||[] };
+      } else if (data && data.data) {
+        menuData = { categories: data.data.categories||[], products: data.data.products||[] };
+      }
+      if (typeof updateStats==='function') updateStats();
+      if (typeof displayAdminCategories==='function') displayAdminCategories();
+      if (typeof updateProductCategoryOptions==='function') updateProductCategoryOptions();
+      if (typeof displayAdminProducts==='function') displayAdminProducts();
+      if (typeof displayCategories==='function') displayCategories();
+      if (typeof displayProducts==='function') displayProducts();
+    }catch(e){ console.error('reloadAll error', e); }
+  }
+
+  document.addEventListener('DOMContentLoaded', reloadAll);
+
+
+
+// Override category submit (رفع الصورة للدرايف ثم حفظ الرابط)
+const catForm = document.getElementById('categoryForm');
+if (catForm){
+  catForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const name   = document.getElementById('categoryName').value;
+    const icon   = document.getElementById('categoryIcon').value;
+    const color  = document.getElementById('categoryColor').value;
+    const imgInp = document.getElementById('categoryImage');
+
+    // ارفع الصورة (إن وُجدت) وخذ رابط العرض المباشر
+    let image = null;
+    if (imgInp && imgInp.files && imgInp.files[0]) {
+      image = await uploadToDrive(imgInp);
+    }
+
+    const editId = this.dataset.editId;
+    try{
+      if (editId){
+        await MenuAPI.updateCategory({ id:Number(editId), name, icon, color, image });
+      }else{
+        await MenuAPI.addCategory({ name, icon, color, image });
+      }
+      await reloadAll();
+    }catch(err){ console.error(err); alert('خطأ في حفظ التصنيف'); }
+  });
+}
+
+
+
+
+
+
+  // Shadow deleteCategory to call API
+  window.deleteCategory = async function(id){
+    if (!confirm('سيتم حذف جميع المنتجات المرتبطة. هل أنت متأكد؟')) return;
+    try{ await MenuAPI.deleteCategory({ id }); await reloadAll(); }catch(e){ alert('تعذّر حذف التصنيف'); }
+  };
+
+  // Override addOrUpdateProduct
+  if (typeof addOrUpdateProduct === 'function'){ /* keep name but replace impl */ }
+  window.addOrUpdateProduct = async function(){
+  const name        = document.getElementById('productName').value;
+  const description = document.getElementById('productDescription').value;
+  const categoryId  = parseInt(document.getElementById('productCategory').value);
+  const badge       = document.getElementById('productBadge').value || null;
+  const available   = document.getElementById('productAvailable').checked;
+  const imgInp      = document.getElementById('productImage');
+
+  // الأحجام
+  const sizes = Array.from(document.querySelectorAll('.size-item')).map((item, i)=>{
+    const n = item.querySelector('.size-name')?.value || '';
+    const d = item.querySelector('.size-desc')?.value || '';
+    const p = item.querySelector('.size-price')?.value || '';
+    if (!n || p==='') return null;
+    return { id: i+1, name:n, description:d, price: parseFloat(p) };
+  }).filter(Boolean);
+  if (!sizes.length){ alert('أضف حجمًا واحدًا على الأقل'); return; }
+
+  // الإضافات
+  const extras = Array.from(document.querySelectorAll('.extra-item')).map((item, i)=>{
+    const n = item.querySelector('.extra-name')?.value || '';
+    const p = item.querySelector('.extra-price')?.value || '';
+    if (!n || p==='') return null;
+    return { id: i+1, name:n, price: parseFloat(p) };
+  }).filter(Boolean);
+
+  // ارفع صورة جديدة لو تم اختيار ملف، وإلا خذ القديمة أثناء التعديل
+  let uploadedUrl = null;
+  if (imgInp && imgInp.files && imgInp.files[0]) {
+    uploadedUrl = await uploadToDrive(imgInp);
+  }
+
+  const editing = !!window.editingProductId;
+  const old = editing ? (menuData.products||[]).find(p=>p.id===window.editingProductId) : null;
+
+  const payload = {
+    id: editing ? window.editingProductId : undefined,
+    name, description, categoryId, badge, available,
+    image: uploadedUrl || (old ? old.image : null),
+    sizes, extras
+  };
+
+  try{
+    if (editing) {
+      await MenuAPI.updateProduct(payload);
+    } else {
+      await MenuAPI.addProduct(payload);
+    }
+    await reloadAll();
+    if (typeof resetProductForm==='function') resetProductForm();
+  }catch(e){ console.error(e); alert('خطأ في حفظ المنتج'); }
+};
+
+  // Shadow deleteProduct to call API
+  window.deleteProduct = async function(id){
+    if (!confirm('هل تريد حذف هذا المنتج؟')) return;
+    try{ await MenuAPI.deleteProduct({ id }); await reloadAll(); }catch(e){ alert('تعذّر حذف المنتج'); }
+  };
+})();
+
+        // تصدير للاستخدام العام
+        window.MenuAPI = MenuAPI;
+        window.sheetsAPI = sheetsAPI;
+
+    
+/* ====== إعدادات البنرات ====== */
+// ====== إعدادات البنرات (معالجة المعاينة والقص) ======
+let bannerCropper = null;
+
+(function setupBannerInputs(){
+  const fileInp   = document.getElementById('bannerImage');
+  const preview   = document.getElementById('bannerPreview');
+  // يدعم الاسمين عشان ما يصير null
+  const wrap = document.getElementById('bannerPreviewContainer') || document.getElementById('bannerPreviewWrap');
+  const resetBtn  = document.getElementById('bannerResetBtn');
+
+  if (!fileInp || !preview) return; // أمان
+
+  fileInp.addEventListener('change', (e) => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) {
+      if (bannerCropper){ bannerCropper.destroy(); bannerCropper = null; }
+      if (wrap) wrap.style.display = 'none';
+      return;
+    }
+
+    // معاينة
+    const url = URL.createObjectURL(f);
+    preview.src = url;
+    if (wrap) wrap.style.display = 'block';
+
+    // أعد إنشاء الكروبر
+    if (bannerCropper) bannerCropper.destroy();
+    bannerCropper = new Cropper(preview, {
+      aspectRatio: 16/9,
+      viewMode: 1,
+      dragMode: 'move',
+      autoCropArea: 1,
+      background: false,
+      responsive: true
+    });
+  });
+
+  if (resetBtn){
+    resetBtn.addEventListener('click', () => {
+      const form = document.getElementById('bannerForm');
+      if (form) form.reset();
+      if (wrap) wrap.style.display = 'none';
+      if (bannerCropper){ bannerCropper.destroy(); bannerCropper = null; }
+    });
+  }
+})();
+
+
+// حفظ البنر: قص → رفع للدرايف → حفظ صف في Banners عبر doPost(action=addBanner)
+document.getElementById('bannerForm')?.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+
+  const fileInp = document.getElementById('bannerImage');
+  const hasOriginal = !!(fileInp && fileInp.files && fileInp.files[0]);
+
+  // لو ما عندي كروبر ولا ملف أصلي، نطلب اختيار صورة
+  if (!bannerCropper && !hasOriginal) {
+    alert('اختر صورة البنر أولاً');
+    return;
+  }
+
+  try {
+    // 1) تجهيز الملف للرفع
+    let uploadFile;
+    if (bannerCropper) {
+      const canvas = bannerCropper.getCroppedCanvas({ width: 1600, height: 900 });
+      const blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', 0.9));
+      uploadFile = new File([blob], `banner_${Date.now()}.jpg`, { type: 'image/jpeg' });
+    } else {
+      uploadFile = fileInp.files[0];
+    }
+
+    // 2) الرفع للدرايف (uploadToDrive تدعم File أو input)
+    const viewUrl = await uploadToDrive(uploadFile);
+
+    // 3) حفظ البنر في الشيت
+    const payload = {
+      image: viewUrl,
+      title: document.getElementById('bannerTitle')?.value || '',
+      subtitle: document.getElementById('bannerSubtitle')?.value || '',
+      alt: document.getElementById('bannerAlt')?.value || ''
+    };
+
+    const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=addBanner`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+    const json = await res.json();
+    if (!json?.success) throw new Error('addBanner failed');
+
+    showSuccessMessage?.('تم رفع البنر وحفظه');
+    await loadBannersList?.();
+    document.getElementById('bannerResetBtn')?.click();
+  } catch (err) {
+    console.error(err);
+    alert('حدث خطأ أثناء رفع/حفظ البنر');
+  }
+});
+
+
+// قراءة البنرات وعرضها في القائمة
+async function loadBannersList(){
+    
+  try{
+    const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getBanners`);
+    const json = await res.json();
+    const arr = json?.data || json?.banners || [];
+    const box = document.getElementById('bannersList');
+    if (!box) return;
+
+    if (arr.length === 0) {
+      box.innerHTML = '<p style="text-align:center;color:#6c757d;padding:20px;">لا توجد بنرات</p>';
+      return;
+    }
+
+    box.innerHTML = arr.map((b,i)=>`
+      <div class="item-card" style="border:1px solid #eee;border-radius:10px;overflow:hidden;">
+        <img src="${b.image}" style="display:block;width:100%;aspect-ratio:16/9;object-fit:cover;" alt="${b.alt || 'بنر'}">
+        <div style="padding:12px">
+          ${b.title ? `<div style="font-weight:600;margin-bottom:4px">${b.title}</div>` : ''}
+          ${b.subtitle ? `<div style="color:#6c757d;font-size:14px">${b.subtitle}</div>` : ''}
+          <button class="btn btn-danger" style="margin-top:8px;padding:6px 12px;font-size:12px" onclick="deleteBanner(${i})">
+            <i class="fas fa-trash"></i> حذف
+          </button>
+        </div>
+      </div>
+    `).join('');
+  }catch(e){
+    console.error('loadBannersList error', e);
+    const box = document.getElementById('bannersList');
+    if (box) box.innerHTML = '<p style="text-align:center;color:#e74c3c;padding:20px;">خطأ في تحميل البنرات</p>';
+  }
+}
+
+// دالة حذف البنر  
+async function deleteBanner(index) {
+  if (!confirm('هل تريد حذف هذا البنر؟')) return;
+  try {
+    await fetch(`${GOOGLE_SCRIPT_URL}?action=deleteBanner`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ index })
+    });
+    await loadBannersList();
+    showSuccessMessage('تم حذف البنر بنجاح');
+  } catch(e) {
+    alert('خطأ في حذف البنر');
+  }
+}
+
+// حمّل البنرات لما يفتح التبويب أو عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+  loadBannersList();
+});
+
+
+    </script>
+</body>
+</html>

@@ -125,9 +125,63 @@ html,body{overflow-x:hidden;}
     .product-content{padding:15px}
     .product-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
     .product-name{font-size:16px;font-weight:700;color:#2c3e50;line-height:1.2;flex:1}
-    .product-price{background:linear-gradient(135deg,#F5C332,#F0B429);color:#fff;padding:6px 12px;border-radius:20px;font-weight:700;font-size:14px;min-width:fit-content;margin-right:8px}
+    .product-price{background:linear-gradient(135deg,#F5C332,#F0B429);color:#fff;padding:6px 6px;border-radius:10px;font-weight:700;font-size:14px;min-width:fit-content}
     .product-description{color:#7f8c8d;font-size:12px;line-height:1.4;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
     .unavailable-overlay{position:absolute;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:14px;z-index:5}
+
+
+    .product-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 120px); /* ناقص ارتفاع الصورة */
+}
+
+.product-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.product-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2c3e50;
+    line-height: 1.2;
+    flex: 1;
+}
+
+.product-description {
+    color: #7f8c8d;
+    font-size: 12px;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 2.8em; /* ارتفاع ثابت لسطرين */
+    flex-grow: 1;
+}
+
+.product-price {
+    background: linear-gradient(135deg, #F5C332, #F0B429);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 14px;
+    text-align: center;
+    margin-top: auto; /* يثبت السعر أسفل البطاقة */
+    width: 100%;
+}
+
+/* احذف product-price من product-header إذا كان موجود */
+.product-header .product-price {
+    display: none;
+}
+
 
     .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:10000;justify-content:center;align-items:flex-end}
     .modal-content{background:#fff;width:100%;max-width:400px;border-radius:20px 20px 0 0;max-height:80vh;overflow-y:auto;animation:slideUp .3s ease}
@@ -352,39 +406,57 @@ html,body{overflow-x:hidden;}
     ));
   };
 
+  // ضعها داخل buildBanners قبل centerAbsolute
+const safeIndex = (i, n) => {
+  if (!n) return 0;
+  i = i % n;
+  return i < 0 ? i + n : i;
+};
+function refreshSlides(){
+  // نعيد القراءة لأن الـDOM قد يتغيّر
+  return sliderContainer.querySelectorAll('.slide');
+}
+
+
+
   // احسب الإزاحة اللازمة لتوسيط الشريحة الحالية
   function centerAbsolute(i, animate){
-    const frame = sliderContainer.closest('.hero-slider') || sliderContainer.parentElement;
-    const slides = sliderContainer.querySelectorAll('.slide');
-    const current = slides[i];
+  const frame = sliderContainer.closest('.hero-slider') || sliderContainer.parentElement;
+  const slides = refreshSlides();
+  const n = slides.length;
+  if (!n) return;
+  i = safeIndex(i, n);
+  index = i;
 
-    // تشغيل/إيقاف الأنيميشن
-    sliderContainer.style.transition = animate ? 'transform .45s ease' : 'none';
+  const current = slides[i];
+  if (!current || typeof current.getBoundingClientRect !== 'function') return;
 
-    // طبّق active (يؤثر على scale)
-    slides.forEach((s,k)=> s.classList.toggle('active', k===i));
+  sliderContainer.style.transition = animate ? 'transform .45s ease' : 'none';
+  slides.forEach((s,k)=> s.classList.toggle('active', k===i));
 
-    // بعد تطبيق الـscale، احسب الإزاحة بدقة
-    requestAnimationFrame(()=>{      // 1
-      requestAnimationFrame(()=>{    // 2 لضمان اكتمال الـlayout
-        const fRect = frame.getBoundingClientRect();
-        const cRect = current.getBoundingClientRect();
-        const frameCenter = fRect.left + fRect.width/2;
-        const slideCenter = cRect.left + cRect.width/2;
-        const delta = slideCenter - frameCenter;        // فرق المراكز
-        const now = getTranslateX(sliderContainer);     // قياس التحويل الحالي
-        const target = now - delta;                     // قيمة التحويل الجديدة
-        sliderContainer.style.transform = `translateX(${target}px)`;
-      });
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      const fRect = frame.getBoundingClientRect();
+      const cRect = current.getBoundingClientRect();
+      const frameCenter = fRect.left + fRect.width/2;
+      const slideCenter = cRect.left + cRect.width/2;
+      const delta = slideCenter - frameCenter;
+
+      const style = window.getComputedStyle(sliderContainer);
+      const m = new DOMMatrixReadOnly(style.transform);
+      const nowX = m.m41;
+      sliderContainer.style.transform = `translateX(${nowX - delta}px)`;
     });
+  });
 
-    // تحديث النقاط (نحوّل index من نطاق "مع الكلونز" إلى نطاق الحقيقي)
-    const realCount = banners.length;
-    let real = i - 1;
-    if (real < 0) real = realCount - 1;
-    if (real >= realCount) real = 0;
-    sliderDots.querySelectorAll('.dot').forEach((d,k)=> d.classList.toggle('active', k===real));
-  }
+  // حدّث النقاط
+  const realCount = banners.length;
+  let real = i - 1;
+  if (real < 0) real = realCount - 1;
+  if (real >= realCount) real = 0;
+  sliderDots.querySelectorAll('.dot').forEach((d,k)=> d.classList.toggle('active', k===real));
+}
+
 
   // مساعد لقراءة translateX الحالي
   function getTranslateX(el){
@@ -395,9 +467,13 @@ html,body{overflow-x:hidden;}
 
   // انتقال إلى فهرس معيّن (i ضمن تسلسل: cloneLast, real..., cloneFirst)
   function goTo(i, animate){
-    index = i;
-    centerAbsolute(index, animate);
-  }
+  const slides = refreshSlides();
+  index = safeIndex(i, slides.length);
+  centerAbsolute(index, animate);
+}
+function next(){ goTo(index+1, true); }
+function prev(){ goTo(index-1, true); }
+
 
   // التالي/السابق
   function next(){ goTo(index+1, true); }
@@ -405,28 +481,33 @@ html,body{overflow-x:hidden;}
 
   // عند انتهاء الأنيميشن: لو وقفنا على clone، نقفز للحقيقي بدون أنيميشن (قصّ)
   sliderContainer.addEventListener('transitionend', ()=>{
-    const slides = sliderContainer.querySelectorAll('.slide');
-    if (!slides.length) return;
+  const slides = refreshSlides();
+  if (!slides.length) return;
 
-    if (slides[index]?.dataset.clone === 'first'){
-      // كنا على cloneFirst → اقفز لأول حقيقي
-      index = 1;
-      centerAbsolute(index, false); // بدون أنيميشن
-    } else if (slides[index]?.dataset.clone === 'last'){
-      // كنا على cloneLast → اقفز لآخر حقيقي
-      index = slides.length - 2;
-      centerAbsolute(index, false);
-    }
-  });
+  if (slides[index]?.dataset.clone === 'first'){
+    index = 1;
+    centerAbsolute(index, false);
+  } else if (slides[index]?.dataset.clone === 'last'){
+    index = slides.length - 2;
+    centerAbsolute(index, false);
+  }
+});
 
-  function startAuto(){ stopAuto(); if (banners.length>1) auto=setInterval(next, SLIDE_MS); }
-  function stopAuto(){ if(auto){ clearInterval(auto); auto=null; } }
+
+function startAuto(){ stopAuto(); if (banners.length>1) auto=setInterval(next, SLIDE_MS); }
+function stopAuto(){ if(auto){ clearInterval(auto); auto=null; } }
+
+document.addEventListener('visibilitychange', ()=>{
+  if (document.hidden) stopAuto(); else startAuto();
+});
+
 
   // تشغيل أولي بعد التحميل
   waitImagesLoaded().then(()=>{
     centerAbsolute(index, false);
-    startAuto();
-    window.addEventListener('resize', ()=>centerAbsolute(index, false), {passive:true});
+startAuto();
+window.addEventListener('resize', ()=>centerAbsolute(index, false), {passive:true});
+
   });
 
   // (اختياري) وقف الأوتوبلاي عند لمس المستخدم ثم استئنافه
@@ -464,9 +545,9 @@ if (Array.isArray(p.sizes) && p.sizes.length){
             <div class="product-content">
               <div class="product-header">
                 <h3 class="product-name">${name}</h3>
-                <div class="product-price">${base.toFixed(2)} ر.س</div>
               </div>
               <p class="product-description">${desc}</p>
+              <div class="product-price">${base.toFixed(2)} ر.س</div>
             </div>
             ${p.available===false ? '<div class="unavailable-overlay">غير متوفر</div>' : ''}
           </div>`;

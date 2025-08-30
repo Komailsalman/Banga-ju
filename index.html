@@ -649,14 +649,23 @@ const displayPrice = (base==null) ? '-' : Number(base).toFixed(0);
           <div class="category-image"><i class="fas fa-list"></i></div>
           <div class="category-name">جميع المنتجات</div>
         </a>${items}`;
+        el.addEventListener('click', (e)=>{
+  const card = e.target.closest('.category-card'); 
+  if(!card) return; 
+  e.preventDefault();
 
-      el.addEventListener('click', (e)=>{
-        const card=e.target.closest('.category-card'); if(!card) return; e.preventDefault();
-        document.querySelectorAll('.category-card').forEach(c=>c.classList.remove('active')); card.classList.add('active');
-        const cat=card.dataset.category;
-        if(cat==='all') displayProducts();
-        else displayProducts(menuData.products.filter(p=> String(p.categoryId)===String(cat)));
-      }, false);
+  // ✦ امسح النص من البحث
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) searchInput.value = '';
+
+  document.querySelectorAll('.category-card').forEach(c=>c.classList.remove('active')); 
+  card.classList.add('active');
+
+  const cat = card.dataset.category;
+  if(cat==='all') displayProducts();
+  else displayProducts(menuData.products.filter(p=> String(p.categoryId)===String(cat)));
+}, false);
+
     }
 
     // بحث

@@ -134,9 +134,14 @@ html,body{overflow-x:hidden;}
 
 .cat-group{ margin-bottom: 18px; }
 .cat-header{
-  font-size:20px; font-weight:700; color:#2c3e50; margin:12px 4px;
-  position: sticky; top: 56px; background:#f0f0f0; padding:6px 4px; z-index: 5;
-  border-right: 4px solid #F5C332; border-radius: 6px;
+  font-size:15px; font-weight:700; color:#2c3e50;
+  /* كان margin:12px 4px; */
+  margin:0 4px 12px;            /* اشطب الهامش العلوي */
+  position: sticky;
+  /* كان top: calc(var(--cats-h, 0px) + 8px); */
+  top: var(--cats-h, 0px);      /* بلا +8 */
+  background:#f3f3f3; padding:6px 4px; z-index:5;
+  border-right:4px solid #F5C332; border-radius:6px;
 }
 
 
@@ -726,15 +731,12 @@ function scrollToCategory(catId){
 
   const header = document.querySelector('.header');
   const catsBar = document.querySelector('.categories-container');
+const isFixed = catsBar && catsBar.classList.contains('is-fixed');
+const catsH   = catsBar ? catsBar.getBoundingClientRect().height : 0;
+const offset  = isFixed ? catsH : 0;
+const targetTop = window.scrollY + group.getBoundingClientRect().top - offset;
+window.scrollTo({ top: targetTop, behavior: 'smooth' });
 
-  const headerH = header ? header.offsetHeight : 0;
-  const catsH   = catsBar ? catsBar.getBoundingClientRect().height : 0;
-  const isCatsFixed = catsBar && catsBar.classList.contains('is-fixed');
-
-  const offset = headerH + (isCatsFixed ? catsH : 0) + 8; // مسافة أمان بسيطة
-  const targetTop = window.scrollY + group.getBoundingClientRect().top - offset;
-
-  window.scrollTo({ top: targetTop, behavior: 'smooth' });
 }
 
 

@@ -132,6 +132,12 @@ html,body{overflow-x:hidden;}
   opacity:1;
 }
 
+.cat-group{ margin-bottom: 18px; }
+.cat-header{
+  font-size:20px; font-weight:700; color:#2c3e50; margin:12px 4px;
+  position: sticky; top: 56px; background:#f0f0f0; padding:6px 4px; z-index: 5;
+  border-right: 4px solid #F5C332; border-radius: 6px;
+}
 
 
     .search-container{margin-bottom:20px}
@@ -158,6 +164,7 @@ html,body{overflow-x:hidden;}
     .product-price {
   font-size: 20px !important;
 }
+
 
 
 
@@ -345,7 +352,7 @@ body.no-scroll{ position:fixed; width:100%; overflow:hidden; }
       </div>
 
       <div class="section-header"><h2 class="section-title">المنتجات</h2></div>
-      <div class="products-grid" id="productsGrid">
+      <div id="productsGrid">
         <div class="loading"><i class="fas fa-spinner"></i><p>جاري تحميل المنتجات...</p></div>
       </div>
     </section>
@@ -653,48 +660,176 @@ window.addEventListener('scroll', ()=>{
 
 
     /* ===================== واجهة: التصنيفات والمنتجات ===================== */
-    function displayProducts(products = null) {
-      const grid=document.getElementById('productsGrid');
-      if(!grid) return;
-      const list = products || menuData.products;
-      if(!list.length){ grid.innerHTML = '<div class="no-results"><i class="fas fa-search-minus"></i><h3>لا توجد منتجات</h3></div>'; return; }
-      grid.innerHTML = list.map(p=>{
-        let base = null;
-if (Array.isArray(p.sizes) && p.sizes.length){
-  const size1 = p.sizes.find(s => String(s.id) === "1");
-base = (size1 && size1.price != null) ? Number(size1.price) : 0;
+    let __showAllGrouped = true;
 
-} else {
-  const single = toNumber(p.price);
-  base = (single!=null && single>=0) ? single : null;
-}
-const displayPrice = (base==null) ? '-' : Number(base).toFixed(0);
+function displayProducts(products = null) {
+  const grid = document.getElementById('productsGrid');
+  if(!grid) return;
 
-        const name = p.name || 'منتج';
-        const desc = p.description || 'لا يوجد وصف';
-        return `
-        <div class="product-card" onclick="openProductModal(${JSON.stringify(p.id)})" data-category="${p.categoryId||0}">
-  <div class="product-image">
-    <img src="${p.image||'https://placehold.co/600x400/png'}" alt="${name}">
-    ${p.badge ? `<div class="badge ${p.badge}">${getBadgeText(p.badge)}</div>` : ``}
-    <div class="product-price-overlay">
-      <span class="icon-saudi_riyal"></span> ${displayPrice}
-    </div>
-  </div>
-  <div class="product-content">
-    <div class="product-header">
-      <h3 class="product-name">${name}</h3>
-    </div>
-    <p class="product-description">${desc}</p>
-  </div>
-</div>
+  // لو ما فيه لستة مُمرّرة، نشتغل على كل المنتجات
+  const fullList = products || menuData.products;
+  if(!fullList.length){
+    grid.innerHTML = '<div class="no-results"><i class="fas fa-search-minus"></i><h3>لا توجد منتجات</h3></div>';
+    teardownScrollSpy();
+    return;
+  }
 
+  if(__showAllGrouped){
+    // نعرض بحسب التصنيفات الحالية وبنفس ترتيبها
+    const cats = menuData.categories;
+    let html = '';
 
-            </div>
-            ${p.available===false ? '<div class="unavailable-overlay">غير متوفر</div>' : ''}
-          </div>`;
-      }).join('');
+    cats.forEach(cat=>{
+      const list = fullList.filter(p => String(p.categoryId) === String(cat.id));
+      if(!list.length) return;
+
+      html += `
+        <div class="cat-group" data-category="${cat.id}">
+          <h3 class="cat-header" id="cat-${cat.id}">${cat.name||'تصنيف'}</h3>
+          <div class="products-grid">
+            ${list.map(p => buildProductCardHTML(p)).join('')}
+          </div>
+        </div>
+      `;
+    });
+
+    // في حال فيه منتجات بدون تصنيف معروف
+    const uncategorized = fullList.filter(p => !menuData.categories.some(c => String(c.id)===String(p.categoryId)));
+    if(uncategorized.length){
+      html += `
+        <div class="cat-group" data-category="uncat">
+          <h3 class="cat-header" id="cat-uncat">بدون تصنيف</h3>
+          <div class="products-grid">
+            ${uncategorized.map(p => buildProductCardHTML(p)).join('')}
+          </div>
+        </div>
+      `;
     }
+
+    grid.innerHTML = html || '<div class="no-results"><i class="fas fa-search-minus"></i><h3>لا توجد منتجات</h3></div>';
+    initScrollSpy(); // فعّل مراقبة التمرير
+  } else {
+    // تصنيف واحد بدون تجميع
+    grid.innerHTML = `
+      <div class="products-grid">
+        ${fullList.map(p => buildProductCardHTML(p)).join('')}
+      </div>
+    `;
+    teardownScrollSpy(); // أوقف المراقبة
+  }
+}
+
+// تفصيل بناء كرت المنتج (نفس منطقك تمامًا)
+function buildProductCardHTML(p){
+  let base = null;
+  if (Array.isArray(p.sizes) && p.sizes.length){
+    const size1 = p.sizes.find(s => String(s.id) === "1");
+    base = (size1 && size1.price != null) ? Number(size1.price) : 0;
+  } else {
+    const single = toNumber(p.price);
+    base = (single!=null && single>=0) ? single : null;
+  }
+  const displayPrice = (base==null) ? '-' : Number(base).toFixed(0);
+  const name = p.name || 'منتج';
+  const desc = p.description || 'لا يوجد وصف';
+
+  return `
+    <div class="product-card" onclick="openProductModal(${JSON.stringify(p.id)})" data-category="${p.categoryId||0}">
+      <div class="product-image">
+        <img src="${p.image||'https://placehold.co/600x400/png'}" alt="${name}">
+        ${p.badge ? `<div class="badge ${p.badge}">${getBadgeText(p.badge)}</div>` : ``}
+        <div class="product-price-overlay">
+          <span class="icon-saudi_riyal"></span> ${displayPrice}
+        </div>
+      </div>
+      <div class="product-content">
+        <div class="product-header">
+          <h3 class="product-name">${name}</h3>
+        </div>
+        <p class="product-description">${desc}</p>
+      </div>
+      ${p.available===false ? '<div class="unavailable-overlay">غير متوفر</div>' : ''}
+    </div>
+  `;
+}
+
+let __spyRAF = null;
+  let __spyEnabled = false;
+
+  function initScrollSpy(){
+    if(__spyEnabled) return;
+    __spyEnabled = true;
+    window.addEventListener('scroll', onSpyScroll, {passive:true});
+    // تحديث أولي
+    updateActiveCategoryByViewport();
+  }
+
+  function teardownScrollSpy(){
+    if(!__spyEnabled) return;
+    __spyEnabled = false;
+    window.removeEventListener('scroll', onSpyScroll);
+    if(__spyRAF){ cancelAnimationFrame(__spyRAF); __spyRAF = null; }
+  }
+
+  function onSpyScroll(){
+    if(__spyRAF) return;
+    __spyRAF = requestAnimationFrame(()=>{
+      __spyRAF = null;
+      updateActiveCategoryByViewport();
+    });
+  }
+
+  function updateActiveCategoryByViewport(){
+    const groups = document.querySelectorAll('.cat-group');
+    if(!groups.length) return;
+
+    const anchorY = 120; // مسافة من أعلى الشاشة نعتبر عندها التصنيف "النشط"
+    let bestId = null;
+    let bestDist = Infinity;
+
+    groups.forEach(g=>{
+      const rect = g.getBoundingClientRect();
+      // نأخذ أقرب مجموعة لنقطة الارتكاز، بشرط أن يكون الجزء مرئي
+      if (rect.bottom > anchorY) {
+        const dist = Math.abs(rect.top - anchorY);
+        if (dist < bestDist) {
+          bestDist = dist;
+          bestId = g.dataset.category;
+        }
+      }
+    });
+
+    if(bestId) setActiveCategoryInBar(bestId);
+  }
+
+  function setActiveCategoryInBar(catId){
+    const cont = document.getElementById('categoriesContainer');
+    if(!cont) return;
+
+    // شيل active من الكل
+    cont.querySelectorAll('.category-card').forEach(c=> c.classList.remove('active'));
+
+    // فعّل المعني
+    const target = cont.querySelector(`.category-card[data-category="${catId}"]`);
+    if (target) target.classList.add('active');
+
+    // حرّك الشريط ليتوسّط العنصر النشط
+    scrollCategoryIntoView(catId);
+  }
+
+  function scrollCategoryIntoView(catId){
+    const cont = document.getElementById('categoriesContainer');
+    const card = cont ? cont.querySelector(`.category-card[data-category="${catId}"]`) : null;
+    if(!cont || !card) return;
+
+    const cRect = cont.getBoundingClientRect();
+    const rRect = card.getBoundingClientRect();
+    const delta = (rRect.left + rRect.width/2) - (cRect.left + cRect.width/2);
+    cont.scrollBy({ left: delta, behavior: 'smooth' });
+  }
+
+   
+   
     function getBadgeText(b){ const map={popular:'الأكثر طلباً',new:'جديد',offer:'عرض خاص',unavailable:'غير متوفر'}; return map[b]||''; }
 
     function displayCategories(){
@@ -713,22 +848,37 @@ const displayPrice = (base==null) ? '-' : Number(base).toFixed(0);
           <div class="category-image"><i class="fas fa-list"></i></div>
           <div class="category-name">جميع المنتجات</div>
         </a>${items}`;
-        el.addEventListener('click', (e)=>{
-  const card = e.target.closest('.category-card'); 
-  if(!card) return; 
-  e.preventDefault();
+    
+    
+    
+      // داخل displayCategories() بعد بناء العناصر…
+  el.addEventListener('click', (e)=>{
+    const card = e.target.closest('.category-card'); 
+    if(!card) return; 
+    e.preventDefault();
 
-  // ✦ امسح النص من البحث
-  const searchInput = document.getElementById('searchInput');
-  if (searchInput) searchInput.value = '';
+    // امسح نص البحث
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.value = '';
 
-  document.querySelectorAll('.category-card').forEach(c=>c.classList.remove('active')); 
-  card.classList.add('active');
+    document.querySelectorAll('.category-card').forEach(c=>c.classList.remove('active')); 
+    card.classList.add('active');
 
-  const cat = card.dataset.category;
-  if(cat==='all') displayProducts();
-  else displayProducts(menuData.products.filter(p=> String(p.categoryId)===String(cat)));
-}, false);
+    const cat = card.dataset.category;
+
+    if(cat==='all'){
+      // عرض كل المنتجات مُجمّعة + تفعيل ScrollSpy
+      __showAllGrouped = true;
+      displayProducts(); // سيستدعي initScrollSpy
+      // تأكد أن أول مجموعة ظاهرة يتم تفعيلها فورًا
+      updateActiveCategoryByViewport();
+    } else {
+      // عرض منتجات تصنيف واحد + إيقاف ScrollSpy
+      __showAllGrouped = false;
+      const list = menuData.products.filter(p=> String(p.categoryId)===String(cat));
+      displayProducts(list); // سيستدعي teardownScrollSpy
+    }
+  }, false);
 
     }
 

@@ -719,6 +719,26 @@ function displayProducts(products = null) {
   }
 }
 
+
+function scrollToCategory(catId){
+  const group = document.querySelector(`.cat-group[data-category="${catId}"]`);
+  if(!group) return;
+
+  const header = document.querySelector('.header');
+  const catsBar = document.querySelector('.categories-container');
+
+  const headerH = header ? header.offsetHeight : 0;
+  const catsH   = catsBar ? catsBar.getBoundingClientRect().height : 0;
+  const isCatsFixed = catsBar && catsBar.classList.contains('is-fixed');
+
+  const offset = headerH + (isCatsFixed ? catsH : 0) + 8; // مسافة أمان بسيطة
+  const targetTop = window.scrollY + group.getBoundingClientRect().top - offset;
+
+  window.scrollTo({ top: targetTop, behavior: 'smooth' });
+}
+
+
+
 // تفصيل بناء كرت المنتج (نفس منطقك تمامًا)
 function buildProductCardHTML(p){
   let base = null;
@@ -852,33 +872,45 @@ let __spyRAF = null;
     
     
       // داخل displayCategories() بعد بناء العناصر…
-  el.addEventListener('click', (e)=>{
-    const card = e.target.closest('.category-card'); 
-    if(!card) return; 
-    e.preventDefault();
+      el.addEventListener('click', (e)=>{
+  const card = e.target.closest('.category-card'); 
+  if(!card) return; 
+  e.preventDefault();
 
-    // امسح نص البحث
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) searchInput.value = '';
+  // فعّل الحالة المجمّعة دائمًا
+  __showAllGrouped = true;
 
-    document.querySelectorAll('.category-card').forEach(c=>c.classList.remove('active')); 
-    card.classList.add('active');
+  // لو فيه نص بحث مفعّل، نفرغه عشان تظهر المجموعات (البحث نفسه يظل يعمل كالمعتاد عند الكتابة لاحقًا)
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput && searchInput.value) searchInput.value = '';
 
-    const cat = card.dataset.category;
+  // أعِد بناء المنتجات كمجموعات (لو كانت مُفلترة سابقًا)
+  displayProducts();
 
-    if(cat==='all'){
-      // عرض كل المنتجات مُجمّعة + تفعيل ScrollSpy
-      __showAllGrouped = true;
-      displayProducts(); // سيستدعي initScrollSpy
-      // تأكد أن أول مجموعة ظاهرة يتم تفعيلها فورًا
-      updateActiveCategoryByViewport();
-    } else {
-      // عرض منتجات تصنيف واحد + إيقاف ScrollSpy
-      __showAllGrouped = false;
-      const list = menuData.products.filter(p=> String(p.categoryId)===String(cat));
-      displayProducts(list); // سيستدعي teardownScrollSpy
-    }
-  }, false);
+  // حدّث الحالة النشطة في الشريط
+  document.querySelectorAll('.category-card').forEach(c=>c.classList.remove('active'));
+  card.classList.add('active');
+
+  const cat = card.dataset.category;
+
+  if (cat === 'all'){
+    // تمرير لبداية قسم المنتجات
+    const header = document.querySelector('.header');
+    const catsBar = document.querySelector('.categories-container');
+    const headerH = header ? header.offsetHeight : 0;
+    const catsH   = catsBar ? catsBar.getBoundingClientRect().height : 0;
+    const isCatsFixed = catsBar && catsBar.classList.contains('is-fixed');
+    const offset = headerH + (isCatsFixed ? catsH : 0) + 8;
+
+    const grid = document.getElementById('productsGrid');
+    const targetTop = window.scrollY + grid.getBoundingClientRect().top - offset;
+    window.scrollTo({ top: targetTop, behavior: 'smooth' });
+  } else {
+    // تمرير لمجموعة التصنيف المطلوب
+    scrollToCategory(cat);
+  }
+}, false);
+
 
     }
 

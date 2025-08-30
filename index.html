@@ -7,7 +7,19 @@
   <link rel="shortcut icon" href="img/ui/mylogo.png" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@emran-alhaddad/saudi-riyal-font/index.css">
+
   <style>
+.icon-saudi_riyal {
+  vertical-align: middle; /* ضبط محاذاته مع الرقم */
+  margin-left: 3px;       /* مسافة صغيرة بين الرمز والرقم */
+  color: inherit;         /* يخلي لونه مثل النص المحيط */
+}
+
+
+
+
+
     /* === نفس تنسيقاتك كما هي (مختصرة هنا اختصارًا) === */
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:'Cairo',sans-serif;background:#f8f9fa;direction:rtl;text-align:right}
@@ -125,9 +137,37 @@ html,body{overflow-x:hidden;}
     .product-content{padding:15px}
     .product-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
     .product-name{font-size:16px;font-weight:700;color:#2c3e50;line-height:1.2;flex:1}
-    .product-price{background:linear-gradient(135deg,#F5C332,#F0B429);color:#fff;padding:6px 6px;border-radius:10px;font-weight:700;font-size:14px;min-width:fit-content}
+    .product-price{background:linear-gradient(135deg,#F5C332,#F0B429);color:#fff;padding:6px 6px;border-radius:10px;font-weight:700;font-size:14px;min-width:fit-content; height: 40px;        /* ارتفاع ثابت */
+  line-height: 30px;   /* يخلي النص يتوسّط عموديًا */}
     .product-description{color:#7f8c8d;font-size:12px;line-height:1.4;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
     .unavailable-overlay{position:absolute;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:14px;z-index:5}
+
+    .product-price {
+  font-size: 20px !important;
+}
+
+
+.product-image {
+  position: relative; /* عشان نقدر نثبت السعر داخله */
+}
+
+.product-price-overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: linear-gradient(135deg,#F5C332,#F0B429);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-direction: row-reverse;}
+
+
 
 
     .product-content {
@@ -170,7 +210,7 @@ html,body{overflow-x:hidden;}
     color: #fff;
     padding: 6px 12px;
     border-radius: 10px;
-    font-weight: 700;
+    font-weight: 650;
     font-size: 14px;
     text-align: center;
     margin-top: auto; /* يثبت السعر أسفل البطاقة */
@@ -525,29 +565,37 @@ window.addEventListener('resize', ()=>centerAbsolute(index, false), {passive:tru
       const list = products || menuData.products;
       if(!list.length){ grid.innerHTML = '<div class="no-results"><i class="fas fa-search-minus"></i><h3>لا توجد منتجات</h3></div>'; return; }
       grid.innerHTML = list.map(p=>{
-        let base = 0;
+        let base = null;
 if (Array.isArray(p.sizes) && p.sizes.length){
-  const nums = p.sizes
-    .map(s => toNumber(s.price))
-    .filter(n => n!=null && n>=0);
-  base = nums.length ? Math.min(...nums) : 0;
+  const size1 = p.sizes.find(s => String(s.id) === "1");
+base = (size1 && size1.price != null) ? Number(size1.price) : 0;
+
 } else {
-  base = toNumber(p.price) || 0;
+  const single = toNumber(p.price);
+  base = (single!=null && single>=0) ? single : null;
 }
+const displayPrice = (base==null) ? '-' : Number(base).toFixed(0);
+
         const name = p.name || 'منتج';
         const desc = p.description || 'لا يوجد وصف';
         return `
-          <div class="product-card" onclick="openProductModal(${JSON.stringify(p.id)})" data-category="${p.categoryId||0}">
-            <div class="product-image">
-              <img src="${p.image||'https://placehold.co/600x400/png'}" alt="${name}">
-              ${p.badge ? `<div class="badge ${p.badge}">${getBadgeText(p.badge)}</div>` : ``}
-            </div>
-            <div class="product-content">
-              <div class="product-header">
-                <h3 class="product-name">${name}</h3>
-              </div>
-              <p class="product-description">${desc}</p>
-              <div class="product-price">${base.toFixed(2)} ر.س</div>
+        <div class="product-card" onclick="openProductModal(${JSON.stringify(p.id)})" data-category="${p.categoryId||0}">
+  <div class="product-image">
+    <img src="${p.image||'https://placehold.co/600x400/png'}" alt="${name}">
+    ${p.badge ? `<div class="badge ${p.badge}">${getBadgeText(p.badge)}</div>` : ``}
+    <div class="product-price-overlay">
+      <span class="icon-saudi_riyal"></span> ${displayPrice}
+    </div>
+  </div>
+  <div class="product-content">
+    <div class="product-header">
+      <h3 class="product-name">${name}</h3>
+    </div>
+    <p class="product-description">${desc}</p>
+  </div>
+</div>
+
+
             </div>
             ${p.available===false ? '<div class="unavailable-overlay">غير متوفر</div>' : ''}
           </div>`;
@@ -619,8 +667,8 @@ if (Array.isArray(p.sizes) && p.sizes.length){
             ${p.sizes.map(s=>`
               <div class="size-option ${s.id===selectedSize.id?'selected':''}" onclick="selectSize(${JSON.stringify(s.id)})">
                 <div class="option-name">${s.name||'حجم'}</div>
-                <div class="option-price">${Number(s.price||0).toFixed(2)} ر.س</div>
-              </div>`).join('')}
+                <div class="option-price"><span class="icon-saudi_riyal"></span> ${Number(s.price||0).toFixed(0)}</div>
+                    </div>`).join('')}
           </div>
         </div>
         ${Array.isArray(p.extras)&&p.extras.length?`
@@ -630,7 +678,7 @@ if (Array.isArray(p.sizes) && p.sizes.length){
               ${p.extras.map(x=>`
                 <div class="extra-option" onclick="toggleExtra(${JSON.stringify(x.id)})">
                   <div class="option-name">${x.name||'إضافة'}</div>
-                  <div class="option-price">+${Number(x.price||0).toFixed(2)} ر.س</div>
+                <div class="option-price">+<span class="icon-saudi_riyal"></span> ${Number(x.price||0).toFixed(2)}</div>
                 </div>`).join('')}
             </div>
           </div>`:''}
@@ -639,7 +687,7 @@ if (Array.isArray(p.sizes) && p.sizes.length){
           <span class="quantity">1</span>
           <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
         </div>
-        <button class="add-to-cart" onclick="addToCart()">إضافة للسلة - ${calculateTotal()} ر.س</button>
+        <button class="add-to-cart" onclick="addToCart()">إضافة للسلة - <span class="icon-saudi_riyal"></span> ${calculateTotal()}</button>
       `;
       modal.style.display='flex'; document.body.style.overflow='hidden';
     }
@@ -648,8 +696,8 @@ if (Array.isArray(p.sizes) && p.sizes.length){
     function toggleExtra(id){ const i=selectedExtras.indexOf(id); const el=document.querySelector(`[onclick="toggleExtra(${JSON.stringify(id)})"]`); if(i>-1){selectedExtras.splice(i,1); el&&el.classList.remove('selected');} else {selectedExtras.push(id); el&&el.classList.add('selected');} updateTotal(); }
     function changeQuantity(d){ quantity=Math.max(1, quantity+d); const el=document.querySelector('.quantity'); if(el) el.textContent=quantity; updateTotal(); }
     function calculateTotal(){ if(!selectedSize) return 0; let t=Number(selectedSize.price||0); if(selectedProduct&&Array.isArray(selectedProduct.extras)) selectedExtras.forEach(id=>{ const ex=selectedProduct.extras.find(e=>String(e.id)===String(id)); if(ex) t+=Number(ex.price||0); }); return (t*quantity).toFixed(2); }
-    function updateTotal(){ const btn=document.querySelector('.add-to-cart'); if(btn) btn.innerHTML=`إضافة للسلة - ${calculateTotal()} ر.س`; }
-    function addToCart(){ if(!selectedProduct||!selectedSize){alert('يرجى اختيار المنتج والحجم'); return;} alert(`تم إضافة ${selectedProduct.name||'منتج'} (${selectedSize.name||'حجم'}) بقيمة ${calculateTotal()} ر.س`); closeProductModal(); }
+    function updateTotal(){ const btn=document.querySelector('.add-to-cart'); if(btn) btn.innerHTML=`إضافة للسلة - <span class="icon-saudi_riyal"></span> ${calculateTotal()}`;}
+    function addToCart(){ if(!selectedProduct||!selectedSize){alert('يرجى اختيار المنتج والحجم'); return;}alert(`تم إضافة ${selectedProduct.name||'منتج'} (${selectedSize.name||'حجم'}) بقيمة ${calculateTotal()} SAR`); closeProductModal(); }
 
     /* ===================== Sticky Categories ===================== */
     function setupStickyCategories(){
@@ -745,6 +793,15 @@ if (Array.isArray(p.sizes) && p.sizes.length){
           sizesByProduct[pid] = sizesByProduct[pid]
             .filter(s=>s.available!==false)
             .sort((a,b)=>a.sortOrder-b.sortOrder);
+
+            // بعد ما جهزنا الأحجام، نحقنها في المنتجات ونعيد العرض
+menuData.products = (menuData.products||[]).map(p => ({
+  ...p,
+  sizes: (sizesByProduct[String(p.id)] || p.sizes || [])
+}));
+displayProducts();
+
+
         });
         maybeRender(); // قد يستدعي بعد المنتجات
       }catch(e){ console.error('GVIZ Sizes error:', e); }
@@ -774,6 +831,13 @@ if (Array.isArray(p.sizes) && p.sizes.length){
           extrasByProduct[pid] = extrasByProduct[pid]
             .filter(x=>x.available!==false)
             .sort((a,b)=>a.sortOrder-b.sortOrder);
+
+            menuData.products = (menuData.products||[]).map(p => ({
+  ...p,
+  extras: (extrasByProduct[String(p.id)] || p.extras || [])
+}));
+displayProducts();
+
         });
         maybeRender();
       }catch(e){ console.error('GVIZ Extras error:', e); }

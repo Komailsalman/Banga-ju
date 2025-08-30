@@ -701,7 +701,7 @@ const displayPrice = (base==null) ? '-' : Number(base).toFixed(0);
   }
 
   function onScroll(){
-    if (window.scrollY >= lockY+30){
+    if (window.scrollY >= lockY+20){
       if (!cats.classList.contains('is-fixed')){
         cats.classList.add('is-fixed');       // فعّل التثبيت
         cats.parentNode.insertBefore(spacer, cats); // ضَع السبايسر مكان الشريط

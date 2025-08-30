@@ -18,8 +18,6 @@
 
 
 
-
-
     /* === نفس تنسيقاتك كما هي (مختصرة هنا اختصارًا) === */
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:'Cairo',sans-serif;background:#f8f9fa;direction:rtl;text-align:right}
@@ -97,6 +95,21 @@ html,body{overflow-x:hidden;}
     .section-title{font-size:18px;font-weight:700;color:#2c3e50;position:relative}
     .section-title:after{content:'';position:absolute;bottom:0;right:0;width:40px;height:3px;background:linear-gradient(135deg,#F5C332,#F0B429);border-radius:2px}
 
+    
+
+
+    .categories-wrapper {
+  height: 160px; /* نفس ارتفاع الشريط */
+}
+.categories-container.is-fixed {
+  position: fixed;
+  top: 0;
+  left: 0; right: 0;
+  background: #fff;
+  z-index: 1000;
+}
+
+
 
 
  .categories-container{display:flex;gap:1px;overflow-x:auto;padding:8px 12px;margin-bottom:16px;scroll-behavior:smooth;background:#fff}
@@ -145,6 +158,7 @@ html,body{overflow-x:hidden;}
     .product-price {
   font-size: 20px !important;
 }
+
 
 
 .product-image {
@@ -295,7 +309,11 @@ html,body{overflow-x:hidden;}
     <!-- Categories + Search + Products -->
     <section class="section">
       <div class="section-header"><h2 class="section-title">التصنيفات</h2></div>
+      <div class="categories-wrapper">
+
+      
       <div class="categories-container" id="categoriesContainer"></div>
+    </div>
 
       <div class="search-container">
         <div class="search-box">
@@ -557,6 +575,18 @@ window.addEventListener('resize', ()=>centerAbsolute(index, false), {passive:tru
 
 
 
+window.addEventListener('scroll', ()=>{
+  const cats = document.querySelector('.categories-container');
+  const wrapper = document.querySelector('.categories-wrapper');
+  const lockY = wrapper.offsetTop;
+  if (window.scrollY >= lockY){
+    cats.classList.add('is-fixed');
+  } else {
+    cats.classList.remove('is-fixed');
+  }
+});
+
+
 
     /* ===================== واجهة: التصنيفات والمنتجات ===================== */
     function displayProducts(products = null) {
@@ -642,6 +672,55 @@ const displayPrice = (base==null) ? '-' : Number(base).toFixed(0);
         displayProducts(list);
       });
     }
+
+
+    (function(){
+  const cats = document.querySelector('.categories-container');
+  if(!cats) return;
+
+  // سبايسر يمنع "نطة" المحتوى لما نثبت الشريط
+  const spacer = document.createElement('div');
+  spacer.className = 'categories-spacer';
+
+  let lockY = 0;    // موضع بداية التثبيت (بالـpx من أعلى الوثيقة)
+  let catsH = 0;    // ارتفاع الشريط لحجز المساحة
+
+  function measure(){
+    // ألغِ التثبيت مؤقتًا للقياس الصحيح
+    cats.classList.remove('is-fixed');
+    if (spacer.parentNode) spacer.remove();
+
+    // احسب موضع الشريط بالنسبة لأعلى الوثيقة
+    const rect = cats.getBoundingClientRect();
+    lockY = rect.top + window.scrollY;
+    catsH = rect.height;
+    // خزّن الارتفاع في متغير CSS لاستخدامه في السبايسر
+    document.documentElement.style.setProperty('--cats-h', catsH + 'px');
+
+    onScroll(); // طبّق الحالة الحالية مباشرة
+  }
+
+  function onScroll(){
+    if (window.scrollY >= lockY+30){
+      if (!cats.classList.contains('is-fixed')){
+        cats.classList.add('is-fixed');       // فعّل التثبيت
+        cats.parentNode.insertBefore(spacer, cats); // ضَع السبايسر مكان الشريط
+      }
+    }else{
+      if (cats.classList.contains('is-fixed')){
+        cats.classList.remove('is-fixed'); // ألغِ التثبيت
+        if (spacer.parentNode) spacer.remove(); // احذف السبايسر
+      }
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', measure);
+  // لو التصنيفات تُبنى ديناميكياً، قيّس بعد البناء
+  document.addEventListener('DOMContentLoaded', measure);
+  setTimeout(measure, 0);
+})();
+
 
     /* ===================== تفاصيل المنتج ===================== */
     function openProductModal(productId){

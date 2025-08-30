@@ -240,12 +240,34 @@ html,body{overflow-x:hidden;}
     .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:10000;justify-content:center;align-items:flex-end}
     .modal-content{background:#fff;width:100%;max-width:400px;border-radius:20px 20px 0 0;max-height:80vh;overflow-y:auto;animation:slideUp .3s ease}
     @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-    .modal-header{padding:20px;border-bottom:1px solid #eee;position:relative}
-    .modal-close{position:absolute;top:15px;left:20px;background:none;border:none;font-size:24px;cursor:pointer;color:#7f8c8d}
+    /* قفل تم تمرير الصفحة عند فتح المودال */
+body.no-scroll{ position:fixed; width:100%; overflow:hidden; }
+
+/* هيدر المودال */
+.modal-header{
+  position: sticky; top:0; z-index:2;
+  height:48px; display:flex; align-items:center; justify-content:flex-end;
+  padding:0 10px; background:rgba(255,255,255,.85); backdrop-filter:saturate(180%) blur(10px);
+  border-bottom:1px solid rgba(0,0,0,.06);
+}
+.modal-close{
+  border:0; background:#000; color:#fff; width:32px; height:32px; border-radius:8px;
+  display:inline-flex; align-items:center; justify-content:center; cursor:pointer; font-size:18px;
+}
+
+/* حاوية محتوى المودال قابلة للتمرير داخليًا */
+#productModal .modal-content{ max-height:90vh; overflow:auto; }
+
+/* تأثير السحب للأسفل */
+#productModal.dragging{ will-change: transform; }
+
     .modal-product-image{width:100%;height:200px;object-fit:cover;border-radius:15px}
     .modal-body{padding:20px}
     .modal-product-name{font-size:20px;font-weight:700;margin-bottom:10px}
     .modal-product-description{color:#7f8c8d;margin-bottom:20px;line-height:1.6}
+
+
+
     .sizes-section,.extras-section{margin-bottom:25px}
     .section-subtitle{font-size:16px;font-weight:600;margin-bottom:10px;color:#2c3e50}
     .size-options,.extra-options{display:flex;flex-direction:column;gap:8px}
@@ -333,8 +355,8 @@ html,body{overflow-x:hidden;}
       <p>جميع الحقوق محفوظة © 2024 عصيرات بنقا</p>
       <div class="footer-contact">
         <div class="contact-item"><i class="fas fa-phone"></i><span>+966 50 123 4567</span></div>
-        <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span>الأحساء - الهفوف </span></div>
-        <div class="contact-item"><i class="fas fa-clock"></i><span>يومياً من 3 م إلى 2 ص </span></div>
+        <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span>الدمام، المنطقة الشرقية</span></div>
+        <div class="contact-item"><i class="fas fa-clock"></i><span>يومياً من 8 ص إلى 12 م</span></div>
       </div>
     </footer>
   </div>
@@ -778,8 +800,103 @@ const displayPrice = (base==null) ? '-' : Number(base).toFixed(0);
         <button class="add-to-cart" onclick="addToCart()">إضافة للسلة - <span class="icon-saudi_riyal"></span> ${calculateTotal()}</button>
       `;
       modal.style.display='flex'; document.body.style.overflow='hidden';
+
+const content = modal.querySelector('.modal-content');
+
+// قفل تمرير الصفحة
+window.__pageScrollY = window.scrollY || 0;
+document.body.style.top = `-${window.__pageScrollY}px`;
+document.body.classList.add('no-scroll');
+
+// ابدأ المودال من الأعلى دائماً
+content.scrollTop = 0;
+
+// فعّل السحب لإغلاق
+setupModalDrag(modal, content);
+
+
     }
-    function closeProductModal(){ document.getElementById('productModal').style.display='none'; document.body.style.overflow='auto'; }
+
+
+    function setupModalDrag(modal, scroller){
+  let startY=0, currentY=0, dragging=false;
+  const THRESHOLD = 80; // المسافة المطلوبة للإغلاق
+
+  const onStart = (e)=>{
+    // لا تبدأ السحب إلا إذا كنا أعلى المودال (ما فيه تمرير داخلي)
+    if (scroller.scrollTop > 0) return;
+    dragging = true;
+    startY = (e.touches? e.touches[0].clientY : e.clientY);
+    currentY = startY;
+    modal.classList.add('dragging');
+  };
+  const onMove = (e)=>{
+    if(!dragging) return;
+    const y = (e.touches? e.touches[0].clientY : e.clientY);
+    currentY = y;
+    const dy = currentY - startY;
+    if (dy > 0){
+      modal.style.transform = `translateY(${dy}px)`;
+      modal.style.transition = 'none';
+      // منع سحب الصفحة نفسها
+      e.preventDefault();
+    }
+  };
+  const onEnd = ()=>{
+    if(!dragging) return;
+    const dy = currentY - startY;
+    modal.classList.remove('dragging');
+    modal.style.transition = 'transform .2s ease';
+    if (dy > THRESHOLD){
+      closeProductModal();
+    } else {
+      modal.style.transform = 'translateY(0)';
+      setTimeout(()=>{ modal.style.transition=''; }, 200);
+    }
+    dragging=false;
+  };
+
+  // مستمعات على محتوى المودال (تمرير داخلي)
+  scroller.addEventListener('touchstart', onStart, {passive:true});
+  scroller.addEventListener('touchmove',  onMove,  {passive:false});
+  scroller.addEventListener('touchend',   onEnd,   {passive:true});
+  scroller.addEventListener('mousedown',  onStart);
+  scroller.addEventListener('mousemove',  onMove);
+  scroller.addEventListener('mouseup',    onEnd);
+
+  // حفظ منظّف لإزالته عند الإغلاق
+  modal._dragCleanup = ()=>{
+    scroller.removeEventListener('touchstart', onStart);
+    scroller.removeEventListener('touchmove',  onMove);
+    scroller.removeEventListener('touchend',   onEnd);
+    scroller.removeEventListener('mousedown',  onStart);
+    scroller.removeEventListener('mousemove',  onMove);
+    scroller.removeEventListener('mouseup',    onEnd);
+  };
+}
+
+
+
+function closeProductModal(){
+  const modal = document.getElementById('productModal');
+  modal.classList.remove('open');
+
+  // تنظيف سحب-للإغلاق
+  if (modal._dragCleanup) { modal._dragCleanup(); modal._dragCleanup = null; }
+  modal.style.transform='';
+  modal.style.transition='';
+
+  // فك قفل تمرير الصفحة وإرجاعها لموضعها
+  document.body.classList.remove('no-scroll');
+  const y = window.__pageScrollY || 0;
+  document.body.style.top = '';
+  window.scrollTo(0, y);
+
+  // ✦ أهم سطر: اخفِ المودال
+  modal.style.display = 'none';
+}
+
+
     function selectSize(id){ if(!selectedProduct) return; selectedSize=selectedProduct.sizes.find(s=>String(s.id)===String(id)); document.querySelectorAll('.size-option').forEach(x=>x.classList.remove('selected')); const el=document.querySelector(`[onclick="selectSize(${JSON.stringify(id)})"]`); if(el) el.classList.add('selected'); updateTotal(); }
     function toggleExtra(id){ const i=selectedExtras.indexOf(id); const el=document.querySelector(`[onclick="toggleExtra(${JSON.stringify(id)})"]`); if(i>-1){selectedExtras.splice(i,1); el&&el.classList.remove('selected');} else {selectedExtras.push(id); el&&el.classList.add('selected');} updateTotal(); }
     function changeQuantity(d){ quantity=Math.max(1, quantity+d); const el=document.querySelector('.quantity'); if(el) el.textContent=quantity; updateTotal(); }
